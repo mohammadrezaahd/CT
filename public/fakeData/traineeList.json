@@ -88,5 +88,14 @@
     "status": "Completed",
     "level": "Medium",
     "updaatedAt": "2026-08-05T08:55:00Z"
+  },
+    {
+    "avatar": "https://i.pravatar.cc/150?img=7",
+    "name": "Mohammadreza",
+    "courseName": "Functional Training",
+    "courseNumber": 107,
+    "status": "Completed",
+    "level": "Hard",
+    "updaatedAt": "2026-08-06T14:50:00Z"
   }
 ]
