@@ -34,6 +34,8 @@ export const theme = createTheme({
           300: "#e4e6e3",
           500: "#7a8078",
           900: "#111211",
+          A100: "#fff",
+          A200: "#000",
         },
 
         success: {
@@ -45,6 +47,27 @@ export const theme = createTheme({
 
         muted: {
           main: "#2c3330",
+        },
+
+        // Semantic status colors
+        yellow: {
+          main: "#fef9c3",
+          sub: "#854d0e",
+        },
+
+        green: {
+          main: "#dcfce7",
+          sub: "#15803d",
+        },
+
+        blue: {
+          main: "#dbeafe",
+          sub: "#1e40af",
+        },
+
+        red: {
+          main: "#fee2e2",
+          sub: "#991b1b",
         },
 
         custom: {
@@ -90,6 +113,8 @@ export const theme = createTheme({
           300: "#30332f",
           500: "#a7ada5",
           900: "#f7f8f6",
+          A100: "#000",
+          A200: "#fff",
         },
 
         success: {
@@ -97,6 +122,31 @@ export const theme = createTheme({
           dark: "#166534",
           light: "#dcfce7",
           contrastText: "#ffffff",
+        },
+
+        muted: {
+          main: "#d1d5d2",
+        },
+
+        // Semantic status colors
+        yellow: {
+          main: "#422006",
+          sub: "#fde68a",
+        },
+
+        green: {
+          main: "#052e16",
+          sub: "#86efac",
+        },
+
+        blue: {
+          main: "#172554",
+          sub: "#93c5fd",
+        },
+
+        red: {
+          main: "#450a0a",
+          sub: "#fca5a5",
         },
 
         custom: {

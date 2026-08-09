@@ -1,0 +1,92 @@
+[
+  {
+    "avatar": "https://i.pravatar.cc/150?img=1",
+    "name": "Alex Johnson",
+    "courseName": "Strength Training",
+    "courseNumber": 101,
+    "status": "Completed",
+    "level": "Medium",
+    "updaatedAt": "2026-08-09T18:30:00Z"
+  },
+  {
+    "avatar": "https://i.pravatar.cc/150?img=2",
+    "name": "Sarah Williams",
+    "courseName": "Cardio Basics",
+    "courseNumber": 102,
+    "status": "In progress",
+    "level": "Easy",
+    "updaatedAt": "2026-08-09T16:45:00Z"
+  },
+  {
+    "avatar": "https://i.pravatar.cc/150?img=3",
+    "name": "Michael Brown",
+    "courseName": "Advanced Strength",
+    "courseNumber": 103,
+    "status": "Not started",
+    "level": "Hard",
+    "updaatedAt": "2026-08-08T12:20:00Z"
+  },
+  {
+    "avatar": "https://i.pravatar.cc/150?img=4",
+    "name": "Emily Davis",
+    "courseName": "Yoga & Flexibility",
+    "courseNumber": 104,
+    "status": "Completed",
+    "level": "Easy",
+    "updaatedAt": "2026-08-08T09:15:00Z"
+  },
+  {
+    "avatar": "https://i.pravatar.cc/150?img=5",
+    "name": "Daniel Wilson",
+    "courseName": "HIIT Workout",
+    "courseNumber": 105,
+    "status": "Failed",
+    "level": "Hard",
+    "updaatedAt": "2026-08-07T21:10:00Z"
+  },
+  {
+    "avatar": "https://i.pravatar.cc/150?img=6",
+    "name": "Olivia Martinez",
+    "courseName": "Weight Loss Program",
+    "courseNumber": 106,
+    "status": "In progress",
+    "level": "Medium",
+    "updaatedAt": "2026-08-07T17:35:00Z"
+  },
+  {
+    "avatar": "https://i.pravatar.cc/150?img=7",
+    "name": "James Anderson",
+    "courseName": "Functional Training",
+    "courseNumber": 107,
+    "status": "Completed",
+    "level": "Hard",
+    "updaatedAt": "2026-08-06T14:50:00Z"
+  },
+  {
+    "avatar": "https://i.pravatar.cc/150?img=8",
+    "name": "Sophia Taylor",
+    "courseName": "Beginner Fitness",
+    "courseNumber": 108,
+    "status": "Not started",
+    "level": "Easy",
+    "updaatedAt": "2026-08-06T10:25:00Z"
+  },
+  {
+    "avatar": "https://i.pravatar.cc/150?img=9",
+    "name": "Matthew Thomas",
+    "courseName": "Muscle Building",
+    "courseNumber": 109,
+    "status": "In progress",
+    "level": "Hard",
+    "updaatedAt": "2026-08-05T19:40:00Z"
+  },
+  {
+    "avatar": "https://i.pravatar.cc/150?img=10",
+    "name": "Emma Jackson",
+    "courseName": "Core Training",
+    "courseNumber": 110,
+    "status": "Completed",
+    "level": "Medium",
+    "updaatedAt": "2026-08-05T08:55:00Z"
+  }
+]
