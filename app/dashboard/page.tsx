@@ -1,9 +1,9 @@
+"use client";
 import { Box, Typography } from "@mui/material";
 
 const Dashboard = () => {
   return (
-    <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-      {/* <DrawerHeader /> */}
+    <Box>
       <Typography sx={{ marginBottom: 2 }}>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus

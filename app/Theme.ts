@@ -1,42 +1,117 @@
 import { createTheme } from "@mui/material/styles";
 
 export const theme = createTheme({
-  palette: {
-    mode: "light",
+  cssVariables: {
+    colorSchemeSelector: "class",
+  },
 
-    primary: {
-      main: "#22c55e",
-      dark: "#166534",
-      light: "#dcfce7",
-      contrastText: "#ffffff",
+  colorSchemes: {
+    light: {
+      palette: {
+        primary: {
+          main: "#22c55e",
+          dark: "#166534",
+          light: "#dcfce7",
+          contrastText: "#ffffff",
+        },
+
+        background: {
+          default: "#f7f8f6",
+          paper: "#ffffff",
+        },
+
+        text: {
+          primary: "#111211",
+          secondary: "#7a8078",
+        },
+
+        divider: "#e4e6e3",
+
+        grey: {
+          50: "#f7f8f6",
+          100: "#f0f2ef",
+          200: "#e9ebe8",
+          300: "#e4e6e3",
+          500: "#7a8078",
+          900: "#111211",
+        },
+
+        success: {
+          main: "#22c55e",
+          dark: "#166534",
+          light: "#dcfce7",
+          contrastText: "#ffffff",
+        },
+
+        muted: {
+          main: "#2c3330",
+        },
+
+        custom: {
+          drawerBackground: "#111211",
+          drawerHover: "#1a1a1a",
+          drawerText: "#ffffff",
+          drawerBorder: "#e4e6e3",
+
+          cardBackground: "#ffffff",
+          cardBorder: "#e4e6e3",
+
+          inputBackground: "#ffffff",
+          inputBorder: "#e4e6e3",
+        },
+      },
     },
 
-    background: {
-      default: "#f7f8f6",
-      paper: "#ffffff",
-    },
+    dark: {
+      palette: {
+        primary: {
+          main: "#22c55e",
+          dark: "#166534",
+          light: "#dcfce7",
+          contrastText: "#ffffff",
+        },
 
-    text: {
-      primary: "#111211",
-      secondary: "#7a8078",
-    },
+        background: {
+          default: "#111211",
+          paper: "#1a1c1a",
+        },
 
-    divider: "#e4e6e3",
+        text: {
+          primary: "#f7f8f6",
+          secondary: "#a7ada5",
+        },
 
-    grey: {
-      50: "#f7f8f6",
-      100: "#f0f2ef",
-      200: "#e9ebe8",
-      300: "#e4e6e3",
-      500: "#7a8078",
-      900: "#111211",
-    },
+        divider: "#30332f",
 
-    success: {
-      main: "#22c55e",
-      dark: "#166534",
-      light: "#dcfce7",
-      contrastText: "#ffffff",
+        grey: {
+          50: "#111211",
+          100: "#1a1c1a",
+          200: "#242724",
+          300: "#30332f",
+          500: "#a7ada5",
+          900: "#f7f8f6",
+        },
+
+        success: {
+          main: "#22c55e",
+          dark: "#166534",
+          light: "#dcfce7",
+          contrastText: "#ffffff",
+        },
+
+        custom: {
+          drawerBackground: "#0d0e0d",
+          drawerHover: "#181a18",
+          drawerText: "#f7f8f6",
+          drawerBorder: "#30332f",
+
+          cardBackground: "#1a1c1a",
+          cardBorder: "#30332f",
+
+          inputBackground: "#1a1c1a",
+          inputBorder: "#30332f",
+        },
+      },
     },
   },
 
@@ -46,18 +121,23 @@ export const theme = createTheme({
     h1: {
       fontWeight: 700,
     },
+
     h2: {
       fontWeight: 700,
     },
+
     h3: {
       fontWeight: 700,
     },
+
     h4: {
       fontWeight: 600,
     },
+
     h5: {
       fontWeight: 600,
     },
+
     h6: {
       fontWeight: 600,
     },
@@ -84,11 +164,12 @@ export const theme = createTheme({
 
     MuiCard: {
       styleOverrides: {
-        root: {
+        root: ({ theme }) => ({
           borderRadius: 14,
-          border: "1px solid #e4e6e3",
+          border: `1px solid ${theme.vars.palette.custom.cardBorder}`,
           boxShadow: "none",
-        },
+          backgroundColor: theme.vars.palette.custom.cardBackground,
+        }),
       },
     },
 
@@ -108,21 +189,58 @@ export const theme = createTheme({
 
     MuiOutlinedInput: {
       styleOverrides: {
-        root: {
+        root: ({ theme }) => ({
           borderRadius: 10,
+          backgroundColor: theme.vars.palette.custom.inputBackground,
 
           "& fieldset": {
-            borderColor: "#e4e6e3",
+            borderColor: theme.vars.palette.custom.inputBorder,
           },
 
           "&:hover fieldset": {
-            borderColor: "#7a8078",
+            borderColor: theme.vars.palette.text.secondary,
           },
 
           "&.Mui-focused fieldset": {
-            borderColor: "#22c55e",
+            borderColor: theme.vars.palette.primary.main,
           },
-        },
+        }),
+      },
+    },
+
+    MuiDrawer: {
+      styleOverrides: {
+        paper: ({ theme }) => ({
+          backgroundColor: theme.vars.palette.custom.drawerBackground,
+          borderRight: `1px solid ${theme.vars.palette.custom.drawerBorder}`,
+        }),
+      },
+    },
+
+    MuiAppBar: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          backgroundColor: theme.vars.palette.background.paper,
+          borderBottom: `1px solid ${theme.vars.palette.custom.drawerBorder}`,
+        }),
+      },
+    },
+
+    MuiListItemButton: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          "&:hover": {
+            backgroundColor: theme.vars.palette.custom.drawerHover,
+          },
+        }),
+      },
+    },
+
+    MuiDivider: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          borderColor: theme.vars.palette.custom.drawerBorder,
+        }),
       },
     },
   },

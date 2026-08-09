@@ -1,12 +1,12 @@
-import { MiniDrawer } from "@/components/layouts";
+import { DashboardLayout } from "@/components/layouts";
 import { FC, ReactNode } from "react";
 
 interface IDashboardLayoutProps {
   children: ReactNode;
 }
 
-const DashboardLayout: FC<IDashboardLayoutProps> = ({ children }) => {
-  return <MiniDrawer>{children}</MiniDrawer>;
+const Layout: FC<IDashboardLayoutProps> = ({ children }) => {
+  return <DashboardLayout>{children}</DashboardLayout>;
 };
 
-export default DashboardLayout;
+export default Layout;
