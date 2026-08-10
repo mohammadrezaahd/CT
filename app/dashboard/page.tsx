@@ -415,7 +415,7 @@ const Dashboard = () => {
             >
               <Box>
                 <Typography variant="h5" sx={{ fontWeight: 700 }}>
-                  Today's Overview
+                  Todays Overview
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   {dateStr} - {trainees.length} sessions scheduled
