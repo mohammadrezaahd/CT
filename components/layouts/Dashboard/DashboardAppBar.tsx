@@ -12,31 +12,33 @@ const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
+
   transition: theme.transitions.create("width", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
   }),
+
   overflowX: "hidden",
 });
 
 const closedMixin = (theme: Theme): CSSObject => ({
+  width: `calc(${theme.spacing(8)} + 1px)`,
+
   transition: theme.transitions.create("width", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  overflowX: "hidden",
-  width: `calc(${theme.spacing(7)} + 1px)`,
 
-  [theme.breakpoints.up("sm")]: {
-    width: `calc(${theme.spacing(8)} + 1px)`,
-  },
+  overflowX: "hidden",
 });
 
 export const DashboardDrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
+
   padding: theme.spacing(0, 1),
+
   ...theme.mixins.toolbar,
 }));
 
@@ -53,8 +55,10 @@ export const DashboardAppBar = styled(MuiAppBar, {
   variants: [
     {
       props: ({ open }) => open,
+
       style: {
         marginLeft: drawerWidth,
+
         width: `calc(100% - ${drawerWidth}px)`,
 
         transition: theme.transitions.create(["width", "margin"], {
@@ -70,13 +74,17 @@ export const DashboardDrawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
 })<{ open?: boolean }>(({ theme }) => ({
   width: drawerWidth,
+
   flexShrink: 0,
+
   whiteSpace: "nowrap",
+
   boxSizing: "border-box",
 
   variants: [
     {
       props: ({ open }) => open,
+
       style: {
         ...openedMixin(theme),
 
@@ -88,6 +96,7 @@ export const DashboardDrawer = styled(MuiDrawer, {
 
     {
       props: ({ open }) => !open,
+
       style: {
         ...closedMixin(theme),
 
