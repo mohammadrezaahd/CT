@@ -3,7 +3,6 @@ import "@mui/material/styles";
 
 declare module "@mui/material/styles" {
   interface Palette {
-    custom: Record<string, string>;
     muted: Record<string, string>;
     yellow: Record<string, string>;
     green: Record<string, string>;
@@ -12,7 +11,6 @@ declare module "@mui/material/styles" {
   }
 
   interface PaletteOptions {
-    custom?: Record<string, string>;
     muted?: Record<string, string>;
     yellow?: Record<string, string>;
     green?: Record<string, string>;
@@ -22,6 +20,48 @@ declare module "@mui/material/styles" {
 }
 
 declare module "@mui/material/styles" {
+  interface Theme {
+    gradients: {
+      light: {
+        profileHero: string;
+      };
+      dark: {
+        profileHero: string;
+      };
+    };
+    layout: {
+      light: {
+        drawerBackground: string;
+        drawerHover: string;
+      };
+      dark: {
+        drawerBackground: string;
+        drawerHover: string;
+      };
+    };
+  }
+
+  interface ThemeOptions {
+    gradients?: {
+      light?: {
+        profileHero?: string;
+      };
+      dark?: {
+        profileHero?: string;
+      };
+    };
+    layout?: {
+      light?: {
+        drawerBackground?: string;
+        drawerHover?: string;
+      };
+      dark?: {
+        drawerBackground?: string;
+        drawerHover?: string;
+      };
+    };
+  }
+
   interface Shape {
     rounded: {
       square: number;

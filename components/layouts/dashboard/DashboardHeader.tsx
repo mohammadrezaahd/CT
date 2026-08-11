@@ -130,7 +130,7 @@ export const DashboardHeader = ({
             sx={{
               width: 40,
               height: 40,
-
+              borderRadius: theme.shape.rounded.square,
               backgroundColor: "action.hover",
               color: "text.primary",
 
@@ -151,6 +151,7 @@ export const DashboardHeader = ({
             sx={{
               width: 40,
               height: 40,
+              borderRadius: theme.shape.rounded.square,
 
               backgroundColor: "action.hover",
               color: "text.primary",

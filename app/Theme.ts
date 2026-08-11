@@ -5,6 +5,26 @@ export const theme = createTheme({
     colorSchemeSelector: "class",
   },
 
+  gradients: {
+    light: {
+      profileHero: "linear-gradient(135deg, #dcfce7 0%, #ffffff 60%)",
+    },
+    dark: {
+      profileHero: "linear-gradient(135deg, #052e16 0%, #1a1c1a 58%, #111211 100%)",
+    },
+  },
+
+  layout: {
+    light: {
+      drawerBackground: "#111211",
+      drawerHover: "#1a1a1a",
+    },
+    dark: {
+      drawerBackground: "#0d0e0d",
+      drawerHover: "#181a18",
+    },
+  },
+
   colorSchemes: {
     light: {
       palette: {
@@ -68,19 +88,6 @@ export const theme = createTheme({
         red: {
           main: "#fee2e2",
           sub: "#991b1b",
-        },
-
-        custom: {
-          drawerBackground: "#111211",
-          drawerHover: "#1a1a1a",
-          drawerText: "#ffffff",
-          drawerBorder: "#e4e6e3",
-
-          cardBackground: "#ffffff",
-          cardBorder: "#e4e6e3",
-
-          inputBackground: "#ffffff",
-          inputBorder: "#e4e6e3",
         },
       },
     },
@@ -148,19 +155,6 @@ export const theme = createTheme({
           main: "#450a0a",
           sub: "#fca5a5",
         },
-
-        custom: {
-          drawerBackground: "#0d0e0d",
-          drawerHover: "#181a18",
-          drawerText: "#f7f8f6",
-          drawerBorder: "#30332f",
-
-          cardBackground: "#1a1c1a",
-          cardBorder: "#30332f",
-
-          inputBackground: "#1a1c1a",
-          inputBorder: "#30332f",
-        },
       },
     },
   },
@@ -223,9 +217,9 @@ export const theme = createTheme({
       styleOverrides: {
         root: ({ theme }) => ({
           borderRadius: 14,
-          border: `1px solid ${theme.vars.palette.custom.cardBorder}`,
+          border: `1px solid ${theme.vars.palette.divider}`,
           boxShadow: "none",
-          backgroundColor: theme.vars.palette.custom.cardBackground,
+          backgroundColor: theme.vars.palette.background.paper,
         }),
       },
     },
@@ -248,10 +242,10 @@ export const theme = createTheme({
       styleOverrides: {
         root: ({ theme }) => ({
           borderRadius: 10,
-          backgroundColor: theme.vars.palette.custom.inputBackground,
+          backgroundColor: theme.vars.palette.background.paper,
 
           "& fieldset": {
-            borderColor: theme.vars.palette.custom.inputBorder,
+            borderColor: theme.vars.palette.divider,
           },
 
           "&:hover fieldset": {
@@ -268,8 +262,8 @@ export const theme = createTheme({
     MuiDrawer: {
       styleOverrides: {
         paper: ({ theme }) => ({
-          backgroundColor: theme.vars.palette.custom.drawerBackground,
-          borderRight: `1px solid ${theme.vars.palette.custom.drawerBorder}`,
+          backgroundColor: theme.layout[theme.palette.mode].drawerBackground,
+          borderRight: `1px solid ${theme.vars.palette.divider}`,
         }),
       },
     },
@@ -278,7 +272,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: ({ theme }) => ({
           backgroundColor: theme.vars.palette.background.paper,
-          borderBottom: `1px solid ${theme.vars.palette.custom.drawerBorder}`,
+          borderBottom: `1px solid ${theme.vars.palette.divider}`,
         }),
       },
     },
@@ -287,7 +281,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: ({ theme }) => ({
           "&:hover": {
-            backgroundColor: theme.vars.palette.custom.drawerHover,
+            backgroundColor: theme.layout[theme.palette.mode].drawerHover,
           },
         }),
       },
@@ -296,7 +290,7 @@ export const theme = createTheme({
     MuiDivider: {
       styleOverrides: {
         root: ({ theme }) => ({
-          borderColor: theme.vars.palette.custom.drawerBorder,
+          borderColor: theme.vars.palette.divider,
         }),
       },
     },

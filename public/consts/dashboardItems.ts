@@ -7,35 +7,42 @@ import {
   DescriptionOutlined,
 } from "@mui/icons-material";
 
+export const dashboardRouteParams = {
+  role: "coach",
+  id: "jsdsflinfvb",
+} as const;
+
+export const dashboardBaseRoute = `/dashboard/${dashboardRouteParams.role}/${dashboardRouteParams.id}`;
+
 export const navigationItems = [
   {
     label: "Dashboard",
     icon: DashboardOutlined,
-    route: "/dashboard/[role]/[id]",
+    route: dashboardBaseRoute,
   },
   {
-    label: "Profile (view / edit)",
+    label: "Profile",
     icon: PersonOutlined,
-    route: "/dashboard/[role]/[id]/profile",
+    route: `${dashboardBaseRoute}/profile`,
   },
   {
-    label: "Courses (manage / add new)",
+    label: "Courses",
     icon: FitnessCenterOutlined,
-    route: "/dashboard/[role]/[id]/courses",
+    route: `${dashboardBaseRoute}/courses`,
   },
   {
     label: "Trainees",
     icon: PeopleOutlined,
-    route: "/dashboard/[role]/[id]/trainees",
+    route: `${dashboardBaseRoute}/trainees`,
   },
   {
     label: "Messages",
     icon: MessageOutlined,
-    route: "/dashboard/[role]/[id]/messages",
+    route: `${dashboardBaseRoute}/messages`,
   },
   {
     label: "Templates",
     icon: DescriptionOutlined,
-    route: "/dashboard/[role]/[id]/templates",
+    route: `${dashboardBaseRoute}/templates`,
   },
 ];

@@ -1,11 +1,13 @@
 "use client";
 
 import { Box, CssBaseline } from "@mui/material";
-import { FC, ReactNode, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { FC, ReactNode, useMemo, useState } from "react";
 import { DashboardDrawerHeader } from "./DashboardAppBar";
 import { DashboardHeader } from "./DashboardHeader";
 import { DashboardDrawer } from "./DashboardDrawer";
 import { DashboardMobileNav } from "./DashboardMobileNav";
+import { navigationItems } from "@/public/consts/dashboardItems";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -13,11 +15,34 @@ interface DashboardLayoutProps {
 
 export const DashboardLayout: FC<DashboardLayoutProps> = ({ children }) => {
   const [open, setOpen] = useState(true);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const pathname = usePathname();
+  const router = useRouter();
 
   const handleNavigation = (index: number) => {
-    setActiveIndex(index);
+    const targetRoute = navigationItems[index]?.route;
+
+    if (targetRoute && targetRoute !== pathname) {
+      router.push(targetRoute);
+    }
   };
+
+  const activeIndex = useMemo(() => {
+    const matchedIndex = navigationItems.reduce((bestIndex, item, index, items) => {
+      const isMatch = pathname === item.route || pathname.startsWith(`${item.route}/`);
+
+      if (!isMatch) {
+        return bestIndex;
+      }
+
+      if (bestIndex === -1) {
+        return index;
+      }
+
+      return item.route.length > items[bestIndex].route.length ? index : bestIndex;
+    }, -1);
+
+    return matchedIndex === -1 ? 0 : matchedIndex;
+  }, [pathname]);
 
   return (
     <Box

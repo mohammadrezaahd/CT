@@ -7,6 +7,7 @@ export interface IUser {
   firstName: string;
   lastName: string;
   email: string;
+  birthDate: Date | string;
   role: UserRole;
   avatarUrl?: string;
   createdAt: string;
@@ -14,9 +15,33 @@ export interface IUser {
 }
 
 export interface ICoach extends IUser {
+  title: string;
+  phoneNumber: string;
+  location: string;
+  address: string;
+  about: string;
+  specialties: string[];
+  certifications: string[];
+  medicalInfo: IMedInfo;
   trainees: ITraineesResultTable[];
   messages: IMessage[];
   activeCourses: IActiveCourse[];
+}
+
+export interface IMedInfo {
+  height: number;
+  weight: number;
+  size: ISize;
+  bloodType: string;
+  allergies: string;
+  injuries: string;
+  notes: string;
+}
+
+export interface ISize {
+  waist: number;
+  hip: number;
+  chest: number;
 }
 
 export interface ITraineesResultTable {

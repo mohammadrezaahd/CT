@@ -3,14 +3,46 @@ import {
   CourseStatus,
   ICoach,
 } from "@/interfaces";
+import { bloodTypeOptions } from "@/public/consts/bloodTypes";
 
-export const coachDashboardData: ICoach = {
+export const coachDashboardData = {
   id: "coach-1",
   firstName: "Mohammad",
   lastName: "Ahadiyan",
+  title: "Performance Coach",
   email: "m.ahadiyan@coachos.dev",
+  birthDate: "1994-05-12",
+  phoneNumber: "+98 912 345 6789",
+  location: "Tehran, Iran",
+  address: "Saadat Abad, 24th Street, No. 18",
   role: "COACH",
   avatarUrl: "https://i.pravatar.cc/120?img=12",
+  about:
+    "Strength and conditioning coach focused on sustainable performance, recovery planning, and habit-based athlete development.",
+  specialties: [
+    "Strength Programming",
+    "Mobility",
+    "Body Recomposition",
+    "Return To Training",
+  ],
+  certifications: [
+    "NASM-CPT",
+    "EXOS Performance Specialist",
+    "Precision Nutrition L1",
+  ],
+  medicalInfo: {
+    height: 181,
+    weight: 82,
+    size: {
+      waist: 84,
+      hip: 98,
+      chest: 104,
+    },
+    bloodType: bloodTypeOptions[6],
+    allergies: "No known allergies",
+    injuries: "Recovered right shoulder strain from 2024",
+    notes: "Prefers low-impact conditioning blocks during high-volume strength cycles.",
+  },
   createdAt: "2026-01-10T08:00:00Z",
   updatedAt: "2026-08-11T09:20:00Z",
   trainees: [
@@ -147,4 +179,4 @@ export const coachDashboardData: ICoach = {
       completion: 100,
     },
   ],
-};
+} as ICoach;

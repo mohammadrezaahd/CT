@@ -132,7 +132,7 @@ export const DashboardDrawer = ({
                   justifyContent: open ? "initial" : "center",
 
                   "&:hover": {
-                    backgroundColor: "custom.drawerHover",
+                    backgroundColor: theme.layout[theme.palette.mode].drawerHover,
                   },
 
                   "&.Mui-selected": {
