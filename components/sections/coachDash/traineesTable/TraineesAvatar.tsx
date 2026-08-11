@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 
 interface TraineeAvatarProps {
   src?: string;
@@ -8,6 +8,8 @@ interface TraineeAvatarProps {
 }
 
 export const TraineeAvatar = ({ src, name }: TraineeAvatarProps) => {
+  const theme = useTheme();
+
   return (
     <Box
       sx={{
@@ -21,7 +23,7 @@ export const TraineeAvatar = ({ src, name }: TraineeAvatarProps) => {
           sm: 40,
         },
 
-        borderRadius: "50%",
+        borderRadius: theme.shape.rounded.circle,
         overflow: "hidden",
         flexShrink: 0,
 

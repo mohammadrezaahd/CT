@@ -20,3 +20,25 @@ declare module "@mui/material/styles" {
     red?: Record<string, string>;
   }
 }
+
+declare module "@mui/material/styles" {
+  interface Shape {
+    rounded: {
+      square: number;
+      light: number;
+      medium: number;
+      large: number;
+      circle: number;
+    };
+  }
+
+  interface ShapeOptions {
+    rounded?: {
+      square?: number;
+      light?: number;
+      medium?: number;
+      large?: number;
+      circle?: number;
+    };
+  }
+}

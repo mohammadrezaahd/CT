@@ -21,11 +21,13 @@ export const DashboardMobileNav = ({
       aria-label="mobile navigation"
       sx={{
         position: "fixed",
+
         left: "50%",
         bottom: {
           xs: 12,
           sm: 20,
         },
+
         transform: "translateX(-50%)",
 
         width: {
@@ -41,7 +43,7 @@ export const DashboardMobileNav = ({
         px: 1,
         py: 1,
 
-        borderRadius: 4,
+        borderRadius: theme.shape.rounded.medium,
 
         backgroundColor: "background.paper",
 
@@ -82,7 +84,7 @@ export const DashboardMobileNav = ({
               outline: 0,
               cursor: "pointer",
 
-              borderRadius: 3,
+              borderRadius: theme.shape.rounded.medium,
 
               backgroundColor: active ? "muted.main" : "transparent",
 
@@ -115,7 +117,9 @@ export const DashboardMobileNav = ({
                   sx={{
                     width: 4,
                     height: 4,
-                    borderRadius: "50%",
+
+                    borderRadius: theme.shape.rounded.circle,
+
                     backgroundColor: "primary.main",
                   }}
                 />

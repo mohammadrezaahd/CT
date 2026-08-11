@@ -9,8 +9,8 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  useTheme,
   Typography,
+  useTheme,
 } from "@mui/material";
 
 import { Bolt, ChevronLeft, ChevronRight } from "@mui/icons-material";
@@ -64,7 +64,7 @@ export const DashboardDrawer = ({
               flexShrink: 0,
 
               backgroundColor: "primary.main",
-              borderRadius: "10px",
+              borderRadius: theme.shape.rounded.medium,
               color: "primary.contrastText",
 
               "&:hover": {
@@ -124,7 +124,9 @@ export const DashboardDrawer = ({
                 sx={{
                   minHeight: 48,
                   px: 2.5,
-                  borderRadius: 2,
+
+                  borderRadius: theme.shape.rounded.light,
+
                   position: "relative",
 
                   justifyContent: open ? "initial" : "center",
@@ -176,8 +178,11 @@ export const DashboardDrawer = ({
                       width: 6,
                       height: 6,
                       minWidth: 6,
-                      borderRadius: "50%",
+
+                      borderRadius: theme.shape.rounded.circle,
+
                       backgroundColor: "primary.main",
+
                       ml: 1.5,
                     }}
                   />

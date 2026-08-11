@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Card, Stack, Typography } from "@mui/material";
+import { Box, Card, Stack, Typography, useTheme } from "@mui/material";
 
 import { TrendingUpRounded } from "@mui/icons-material";
 
@@ -33,12 +33,14 @@ export const DashboardStatCard = ({
   trendBackground,
   description,
 }: DashboardStatCardProps) => {
+  const theme = useTheme();
+
   return (
     <Card
       sx={{
         p: 3,
 
-        borderRadius: 3,
+        borderRadius: theme.shape.rounded.medium,
 
         transition: "all 0.2s",
 
@@ -72,7 +74,7 @@ export const DashboardStatCard = ({
               width: 40,
               height: 40,
 
-              borderRadius: 1,
+              borderRadius: theme.shape.rounded.square,
 
               display: "flex",
               alignItems: "center",
@@ -118,7 +120,7 @@ export const DashboardStatCard = ({
                 px: 1,
                 py: 0.4,
 
-                borderRadius: 1.5,
+                borderRadius: theme.shape.rounded.light,
               }}
             >
               <TrendingUpRounded

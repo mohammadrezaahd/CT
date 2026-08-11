@@ -8,6 +8,7 @@ import {
   Toolbar,
   Typography,
   useColorScheme,
+  useTheme,
 } from "@mui/material";
 
 import {
@@ -21,16 +22,15 @@ import { DashboardAppBar } from "./DashboardAppBar";
 
 interface DashboardHeaderProps {
   open: boolean;
-  isMobile: boolean;
   onOpenDrawer: () => void;
 }
 
 export const DashboardHeader = ({
   open,
-  isMobile,
   onOpenDrawer,
 }: DashboardHeaderProps) => {
   const { mode, setMode } = useColorScheme();
+  const theme = useTheme();
 
   const handleThemeToggle = () => {
     setMode(mode === "dark" ? "light" : "dark");
@@ -39,12 +39,21 @@ export const DashboardHeader = ({
   return (
     <DashboardAppBar
       position="fixed"
-      open={isMobile ? false : open}
       sx={{
-        ...(isMobile && {
-          width: "100%",
-          marginLeft: 0,
-        }),
+        width: {
+          xs: "100%",
+          md: open ? `calc(100% - 240px)` : "100%",
+        },
+
+        ml: {
+          xs: 0,
+          md: open ? "260px" : 0,
+        },
+
+        transition: (theme) =>
+          theme.transitions.create(["width", "margin"], {
+            duration: theme.transitions.duration.enteringScreen,
+          }),
       }}
     >
       <Toolbar
@@ -72,11 +81,18 @@ export const DashboardHeader = ({
             gap: 2,
           }}
         >
-          {!isMobile && !open && (
-            <IconButton aria-label="open drawer" onClick={onOpenDrawer}>
-              <Menu />
-            </IconButton>
-          )}
+          <IconButton
+            aria-label="open drawer"
+            onClick={onOpenDrawer}
+            sx={{
+              display: {
+                xs: "none",
+                md: open ? "none" : "flex",
+              },
+            }}
+          >
+            <Menu />
+          </IconButton>
 
           <Typography
             variant="h6"
@@ -108,8 +124,6 @@ export const DashboardHeader = ({
             },
           }}
         >
-          {/* Theme */}
-
           <IconButton
             aria-label="toggle theme"
             onClick={handleThemeToggle}
@@ -132,8 +146,6 @@ export const DashboardHeader = ({
             )}
           </IconButton>
 
-          {/* Notifications */}
-
           <IconButton
             aria-label="notifications"
             sx={{
@@ -150,8 +162,6 @@ export const DashboardHeader = ({
           >
             <NotificationsOutlined fontSize="small" />
           </IconButton>
-
-          {/* User */}
 
           <Select
             defaultValue="user"
@@ -205,7 +215,7 @@ export const DashboardHeader = ({
                     width: 32,
                     height: 32,
 
-                    borderRadius: "50%",
+                    borderRadius: theme.shape.rounded.circle,
 
                     display: "flex",
                     alignItems: "center",

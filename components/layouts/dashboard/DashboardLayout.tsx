@@ -1,11 +1,8 @@
 "use client";
 
-import { Box, CssBaseline, useMediaQuery, useTheme } from "@mui/material";
-
+import { Box, CssBaseline } from "@mui/material";
 import { FC, ReactNode, useState } from "react";
-
 import { DashboardDrawerHeader } from "./DashboardAppBar";
-
 import { DashboardHeader } from "./DashboardHeader";
 import { DashboardDrawer } from "./DashboardDrawer";
 import { DashboardMobileNav } from "./DashboardMobileNav";
@@ -15,12 +12,7 @@ interface DashboardLayoutProps {
 }
 
 export const DashboardLayout: FC<DashboardLayoutProps> = ({ children }) => {
-  const theme = useTheme();
-
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-
   const [open, setOpen] = useState(true);
-
   const [activeIndex, setActiveIndex] = useState(0);
 
   const handleNavigation = (index: number) => {
@@ -41,35 +33,39 @@ export const DashboardLayout: FC<DashboardLayoutProps> = ({ children }) => {
           Header
       ========================= */}
 
-      <DashboardHeader
-        open={open}
-        isMobile={isMobile}
-        onOpenDrawer={() => setOpen(true)}
-      />
+      <DashboardHeader onOpenDrawer={() => setOpen(true)} open={open} />
 
       {/* =========================
-          Desktop Navigation
+          Desktop Navigation - فقط در md به بالا
       ========================= */}
 
-      {!isMobile && (
+      <Box
+        sx={{
+          display: { xs: "none", md: "block" },
+        }}
+      >
         <DashboardDrawer
           open={open}
           activeIndex={activeIndex}
           onNavigate={handleNavigation}
           onClose={() => setOpen(false)}
         />
-      )}
+      </Box>
 
       {/* =========================
-          Mobile Navigation
+          Mobile Navigation - فقط در xs و sm
       ========================= */}
 
-      {isMobile && (
+      <Box
+        sx={{
+          display: { xs: "block", md: "none" },
+        }}
+      >
         <DashboardMobileNav
           activeIndex={activeIndex}
           onNavigate={handleNavigation}
         />
-      )}
+      </Box>
 
       {/* =========================
           Main Content
@@ -87,24 +83,25 @@ export const DashboardLayout: FC<DashboardLayoutProps> = ({ children }) => {
             md: 3,
           },
 
-          /*
-           * Space for fixed AppBar
-           */
           pt: {
             xs: 10,
             md: 11,
           },
 
-          /*
-           * Space for floating mobile navigation
-           */
           pb: {
             xs: 11,
             md: 3,
           },
         }}
       >
-        {!isMobile && <DashboardDrawerHeader />}
+        {/* فقط در دسکتاپ نمایش داده میشه */}
+        <Box
+          sx={{
+            display: { xs: "none", md: "block" },
+          }}
+        >
+          <DashboardDrawerHeader />
+        </Box>
 
         {children}
       </Box>

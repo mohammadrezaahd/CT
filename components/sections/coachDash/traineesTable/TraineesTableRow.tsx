@@ -7,6 +7,7 @@ import {
   TableCell,
   TableRow,
   Typography,
+  useTheme,
 } from "@mui/material";
 
 import { ITraineesResultTable } from "@/interfaces";
@@ -20,6 +21,8 @@ interface TraineeTableRowProps {
 }
 
 export const TraineeTableRow = ({ trainee }: TraineeTableRowProps) => {
+  const theme = useTheme();
+
   const statusConfig = getStatusConfig(trainee.status);
 
   const levelColor = getLevelColor(trainee.level);
@@ -118,7 +121,7 @@ export const TraineeTableRow = ({ trainee }: TraineeTableRowProps) => {
               sm: "0.7rem",
             },
 
-            borderRadius: 1,
+            borderRadius: theme.shape.rounded.square,
 
             minWidth: {
               xs: 80,
@@ -175,7 +178,7 @@ export const TraineeTableRow = ({ trainee }: TraineeTableRowProps) => {
           variant="contained"
           size="small"
           sx={{
-            borderRadius: 1.5,
+            borderRadius: theme.shape.rounded.light,
 
             fontWeight: 600,
 

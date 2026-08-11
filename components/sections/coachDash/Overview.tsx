@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Button, Paper, Typography } from "@mui/material";
+import { Box, Button, Paper, Typography, useTheme } from "@mui/material";
 
 import { ArrowForwardRounded } from "@mui/icons-material";
 
@@ -9,6 +9,8 @@ import { TraineesTable } from "./traineesTable";
 import { ITraineesResultTable } from "@/interfaces";
 
 export const TodaysOverview = () => {
+  const theme = useTheme();
+
   const today = new Date();
   const trainees = traineesJson as ITraineesResultTable[];
   const dateStr = today.toLocaleDateString("en-US", {
@@ -35,7 +37,7 @@ export const TodaysOverview = () => {
     >
       <Paper
         sx={{
-          borderRadius: 3,
+          borderRadius: theme.shape.rounded.medium,
           overflow: "hidden",
         }}
       >
@@ -78,7 +80,7 @@ export const TodaysOverview = () => {
             variant="outlined"
             endIcon={<ArrowForwardRounded />}
             sx={{
-              borderRadius: 2,
+              borderRadius: theme.shape.rounded.light,
 
               borderColor: "divider",
 
