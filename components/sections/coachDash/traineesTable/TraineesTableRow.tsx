@@ -102,6 +102,22 @@ export const TraineeTableRow = ({ trainee }: TraineeTableRowProps) => {
         </Box>
       </TableCell>
 
+      {/* Course Number */}
+
+      <TableCell align="center">
+        <Typography
+          sx={{
+            fontWeight: 600,
+            fontSize: {
+              xs: "0.72rem",
+              sm: "0.8rem",
+            },
+          }}
+        >
+          {trainee.courseNumber}
+        </Typography>
+      </TableCell>
+
       {/* Status */}
 
       <TableCell>
@@ -152,6 +168,28 @@ export const TraineeTableRow = ({ trainee }: TraineeTableRowProps) => {
         />
       </TableCell>
 
+      {/* Course Name */}
+
+      <TableCell align="center">
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{
+            fontWeight: 500,
+            fontSize: {
+              xs: "0.68rem",
+              sm: "0.78rem",
+            },
+
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          }}
+        >
+          {trainee.courseName}
+        </Typography>
+      </TableCell>
+
       {/* Level */}
 
       <TableCell align="center">
@@ -178,7 +216,7 @@ export const TraineeTableRow = ({ trainee }: TraineeTableRowProps) => {
           variant="contained"
           size="small"
           sx={{
-            borderRadius: theme.shape.rounded.light,
+            borderRadius: theme.shape.rounded.square,
 
             fontWeight: 600,
 

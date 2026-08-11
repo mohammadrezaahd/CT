@@ -1,14 +1,14 @@
-import { TraineesTableLevel } from "@/interfaces";
+import { CourseLevel } from "@/interfaces";
 
-export const getLevelColor = (level: TraineesTableLevel) => {
+export const getLevelColor = (level: CourseLevel) => {
   switch (level) {
-    case TraineesTableLevel.EZ:
+    case CourseLevel.EZ:
       return "green.sub";
 
-    case TraineesTableLevel.MED:
+    case CourseLevel.MED:
       return "yellow.sub";
 
-    case TraineesTableLevel.HARD:
+    case CourseLevel.HARD:
       return "red.sub";
 
     default:

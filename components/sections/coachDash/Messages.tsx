@@ -10,40 +10,12 @@ import {
   useTheme,
 } from "@mui/material";
 import { MailOutlineRounded } from "@mui/icons-material";
-
-export interface DashboardMessage {
-  id: string;
-  sender: string;
-  content: string;
-  time: string;
-}
+import { coachDashboardData } from "@/public/fakeData/coachDashboard";
 
 export const DashboardMessages = () => {
   const theme = useTheme();
 
-  const messages = [
-    {
-      id: "message-1",
-      sender: "Ava Rahimi",
-      content:
-        "Coach, I finished yesterday's mobility work and uploaded my progress video.",
-      time: "08:30",
-    },
-    {
-      id: "message-2",
-      sender: "Reza Mohammadi",
-      content:
-        "Can we move today's session to 5:30 PM? I have a meeting overlap.",
-      time: "09:10",
-    },
-    {
-      id: "message-3",
-      sender: "Sara Azimi",
-      content:
-        "My knee feels better this week. Should I increase squat load in tomorrow's plan?",
-      time: "10:02",
-    },
-  ];
+  const messages = coachDashboardData.messages;
 
   return (
     <Paper

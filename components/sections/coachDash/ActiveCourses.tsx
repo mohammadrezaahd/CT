@@ -2,88 +2,18 @@
 
 import {
   Box,
+  Card,
   Chip,
   Paper,
   Typography,
   useTheme,
 } from "@mui/material";
-
-interface ActiveCourseItem {
-  id: string;
-  name: string;
-  status: "On Track" | "Needs Attention" | "Delayed";
-  totalDays: number;
-  elapsedDays: number;
-}
-
-const courses: ActiveCourseItem[] = [
-  {
-    id: "course-1",
-    name: "Strength Foundations",
-    status: "On Track",
-    totalDays: 56,
-    elapsedDays: 34,
-  },
-  {
-    id: "course-2",
-    name: "Mobility Reset",
-    status: "Needs Attention",
-    totalDays: 42,
-    elapsedDays: 26,
-  },
-  {
-    id: "course-3",
-    name: "Endurance Builder",
-    status: "Delayed",
-    totalDays: 60,
-    elapsedDays: 39,
-  },
-  {
-    id: "course-4",
-    name: "Core Stability",
-    status: "On Track",
-    totalDays: 35,
-    elapsedDays: 20,
-  },
-  {
-    id: "course-5",
-    name: "Weight Management",
-    status: "Needs Attention",
-    totalDays: 50,
-    elapsedDays: 22,
-  },
-  {
-    id: "course-6",
-    name: "Injury Recovery",
-    status: "On Track",
-    totalDays: 45,
-    elapsedDays: 28,
-  },
-];
-
-const getStatusStyle = (status: ActiveCourseItem["status"]) => {
-  if (status === "On Track") {
-    return {
-      bg: "green.main",
-      text: "green.sub",
-    };
-  }
-
-  if (status === "Needs Attention") {
-    return {
-      bg: "yellow.main",
-      text: "yellow.sub",
-    };
-  }
-
-  return {
-    bg: "red.main",
-    text: "red.sub",
-  };
-};
+import { coachDashboardData } from "@/public/fakeData/coachDashboard";
+import { getStatusConfig, getStatusLabel } from "@/ui";
 
 export const DashboardActiveCourses = () => {
   const theme = useTheme();
+  const courses = coachDashboardData.activeCourses;
 
   return (
     <Paper
@@ -156,15 +86,13 @@ export const DashboardActiveCourses = () => {
         }}
       >
         {courses.map((course) => {
-          const remainingDays = Math.max(course.totalDays - course.elapsedDays, 0);
-          const progress = Math.min(
-            Math.max((course.elapsedDays / course.totalDays) * 100, 0),
-            100,
-          );
-          const statusStyle = getStatusStyle(course.status);
+          const elapsedDays = Math.max(course.elapsed, 0);
+          const remainingDays = Math.max(course.remaining, 0);
+          const progress = Math.min(Math.max(course.completion, 0), 100);
+          const statusStyle = getStatusConfig(course.status);
 
           return (
-            <Box
+            <Card
               key={course.id}
               sx={{
                 p: 2,
@@ -193,15 +121,15 @@ export const DashboardActiveCourses = () => {
                     textOverflow: "ellipsis",
                   }}
                 >
-                  {course.name}
+                  {course.title}
                 </Typography>
 
                 <Chip
-                  label={course.status}
+                  label={getStatusLabel(course.status)}
                   size="small"
                   sx={{
-                    backgroundColor: statusStyle.bg,
-                    color: statusStyle.text,
+                    backgroundColor: statusStyle.bgColor,
+                    color: statusStyle.textColor,
                     fontWeight: 600,
                     borderRadius: theme.shape.rounded.square,
                     flexShrink: 0,
@@ -217,7 +145,7 @@ export const DashboardActiveCourses = () => {
                   display: "block",
                 }}
               >
-                {`Elapsed ${course.elapsedDays} days | Remaining ${remainingDays} days`}
+                {`Elapsed ${elapsedDays} days | Remaining ${remainingDays} days`}
               </Typography>
 
               <Box
@@ -304,7 +232,7 @@ export const DashboardActiveCourses = () => {
                   </Box>
                 </Box>
               </Box>
-            </Box>
+            </Card>
           );
         })}
       </Box>

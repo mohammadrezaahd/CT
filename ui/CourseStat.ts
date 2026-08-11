@@ -5,32 +5,32 @@ import {
   BlockRounded,
 } from "@mui/icons-material";
 
-import { TraineesTableStatus } from "@/interfaces";
+import { CourseStatus } from "@/interfaces";
 
-export const getStatusConfig = (status: TraineesTableStatus) => {
+export const getStatusConfig = (status: CourseStatus) => {
   switch (status) {
-    case TraineesTableStatus.COMP:
+    case CourseStatus.COMP:
       return {
         icon: CheckCircleRounded,
         bgColor: "green.main",
         textColor: "green.sub",
       };
 
-    case TraineesTableStatus.PROG:
+    case CourseStatus.PROG:
       return {
         icon: PlayArrowRounded,
         bgColor: "blue.main",
         textColor: "blue.sub",
       };
 
-    case TraineesTableStatus.PEND:
+    case CourseStatus.PEND:
       return {
         icon: PendingRounded,
         bgColor: "yellow.main",
         textColor: "yellow.sub",
       };
 
-    case TraineesTableStatus.FAILD:
+    case CourseStatus.FAILD:
       return {
         icon: BlockRounded,
         bgColor: "red.main",
@@ -46,19 +46,19 @@ export const getStatusConfig = (status: TraineesTableStatus) => {
   }
 };
 
-export const getStatusLabel = (status: TraineesTableStatus) => {
+export const getStatusLabel = (status: CourseStatus) => {
   switch (status) {
-    case TraineesTableStatus.COMP:
+    case CourseStatus.COMP:
       return "Completed";
 
-    case TraineesTableStatus.PROG:
+    case CourseStatus.PROG:
       return "In Progress";
 
-    case TraineesTableStatus.PEND:
+    case CourseStatus.PEND:
       return "Not Started";
 
-    case TraineesTableStatus.FAILD:
-      return "Skipped";
+    case CourseStatus.FAILD:
+      return "Failed";
 
     default:
       return status;

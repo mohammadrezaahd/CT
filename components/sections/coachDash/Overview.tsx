@@ -4,15 +4,14 @@ import { Box, Button, Paper, Typography, useTheme } from "@mui/material";
 
 import { ArrowForwardRounded } from "@mui/icons-material";
 
-import traineesJson from "@/public/fakeData/traineeList.json";
+import { coachDashboardData } from "@/public/fakeData/coachDashboard";
 import { TraineesTable } from "./traineesTable";
-import { ITraineesResultTable } from "@/interfaces";
 
 export const TodaysOverview = () => {
   const theme = useTheme();
 
   const today = new Date();
-  const trainees = traineesJson as ITraineesResultTable[];
+  const trainees = coachDashboardData.trainees;
 
   const dateStr = today.toLocaleDateString("en-US", {
     weekday: "long",

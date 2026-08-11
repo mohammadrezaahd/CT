@@ -23,8 +23,8 @@ export const TraineesTable = ({
 }: TraineesTableProps) => {
   const sortedTrainees = [...trainees].sort(
     (a, b) =>
-      new Date(b.updaatedAt).getTime() -
-      new Date(a.updaatedAt).getTime(),
+      new Date(b.updatedAt).getTime() -
+      new Date(a.updatedAt).getTime(),
   );
 
   return (
@@ -58,8 +58,8 @@ export const TraineesTable = ({
                 color: "text.secondary",
 
                 width: {
-                  xs: "30%",
-                  sm: "35%",
+                  xs: "34%",
+                  sm: "30%",
                 },
 
                 minWidth: {
@@ -72,13 +72,33 @@ export const TraineesTable = ({
             </TableCell>
 
             <TableCell
+              align="center"
               sx={{
                 fontWeight: 600,
                 color: "text.secondary",
 
                 width: {
-                  xs: "30%",
-                  sm: "25%",
+                  xs: "12%",
+                  sm: "10%",
+                },
+
+                minWidth: {
+                  xs: 70,
+                  sm: 80,
+                },
+              }}
+            >
+              COURSE #
+            </TableCell>
+
+            <TableCell
+              sx={{
+                fontWeight: 600,
+                color: "text.secondary",
+
+                width: {
+                  xs: "22%",
+                  sm: "20%",
                 },
 
                 minWidth: {
@@ -96,11 +116,34 @@ export const TraineesTable = ({
                 fontWeight: 600,
                 color: "text.secondary",
 
-                width: "15%",
+                width: {
+                  xs: "12%",
+                  sm: "10%",
+                },
 
                 minWidth: {
                   xs: 60,
                   sm: 70,
+                },
+              }}
+            >
+              COURSE NAME
+            </TableCell>
+
+            <TableCell
+              align="center"
+              sx={{
+                fontWeight: 600,
+                color: "text.secondary",
+
+                width: {
+                  xs: "20%",
+                  sm: "20%",
+                },
+
+                minWidth: {
+                  xs: 120,
+                  sm: 130,
                 },
               }}
             >
@@ -113,11 +156,14 @@ export const TraineesTable = ({
                 fontWeight: 600,
                 color: "text.secondary",
 
-                width: "25%",
+                width: {
+                  xs: "16%",
+                  sm: "10%",
+                },
 
                 minWidth: {
-                  xs: 80,
-                  sm: 100,
+                  xs: 70,
+                  sm: 80,
                 },
               }}
             >

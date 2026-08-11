@@ -1,25 +1,41 @@
 import {
   DashboardOutlined,
   PeopleOutlined,
+  PersonOutlined,
   FitnessCenterOutlined,
-  SettingsOutlined,
+  MessageOutlined,
+  DescriptionOutlined,
 } from "@mui/icons-material";
 
 export const navigationItems = [
   {
     label: "Dashboard",
     icon: DashboardOutlined,
+    route: "/dashboard/[role]/[id]",
+  },
+  {
+    label: "Profile (view / edit)",
+    icon: PersonOutlined,
+    route: "/dashboard/[role]/[id]/profile",
+  },
+  {
+    label: "Courses (manage / add new)",
+    icon: FitnessCenterOutlined,
+    route: "/dashboard/[role]/[id]/courses",
   },
   {
     label: "Trainees",
     icon: PeopleOutlined,
+    route: "/dashboard/[role]/[id]/trainees",
   },
   {
-    label: "Workouts",
-    icon: FitnessCenterOutlined,
+    label: "Messages",
+    icon: MessageOutlined,
+    route: "/dashboard/[role]/[id]/messages",
   },
   {
-    label: "Settings",
-    icon: SettingsOutlined,
+    label: "Templates",
+    icon: DescriptionOutlined,
+    route: "/dashboard/[role]/[id]/templates",
   },
 ];

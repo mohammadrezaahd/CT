@@ -1,8 +1,16 @@
 "use client";
 
 import { Box, Button, Typography } from "@mui/material";
+import { CourseStatus } from "@/interfaces";
+import { coachDashboardData } from "@/public/fakeData/coachDashboard";
 
 export const DashboardWelcome = () => {
+  const activeCoursesCount = coachDashboardData.activeCourses.length;
+  const traineesNeedAttention = coachDashboardData.trainees.filter(
+    (trainee) =>
+      trainee.status === CourseStatus.FAILD || trainee.status === CourseStatus.PEND,
+  ).length;
+
   return (
     <Box
       sx={{
@@ -20,7 +28,7 @@ export const DashboardWelcome = () => {
             letterSpacing: "-0.02em",
           }}
         >
-          Good morning, Coach Alireza
+          {`Good morning, Coach ${coachDashboardData.firstName}`}
         </Typography>
 
         <Typography
@@ -31,7 +39,7 @@ export const DashboardWelcome = () => {
             maxWidth: 600,
           }}
         >
-          You have 6 active courses and 2 trainees requiring attention.
+          {`You have ${activeCoursesCount} active courses and ${traineesNeedAttention} trainees requiring attention.`}
         </Typography>
       </Box>
       <Box>
