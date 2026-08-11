@@ -1,6 +1,8 @@
 "use client";
 
 import {
+  DashboardActiveCourses,
+  DashboardMessages,
   DashboardStats,
   DashboardWelcome,
   TodaysOverview,
@@ -12,14 +14,32 @@ const Dashboard = () => {
     <Box
       sx={{
         width: "100%",
-        py: 4,
+        // py: 4,
       }}
     >
       <DashboardWelcome />
 
       <DashboardStats />
 
-      <TodaysOverview />
+      <Box
+        sx={{
+          mt: 5,
+
+          display: "grid",
+
+          gridTemplateColumns: {
+            xs: "1fr",
+            md: "minmax(0, 2fr) minmax(280px, 1fr)",
+          },
+
+          gap: 3,
+        }}
+      >
+        <TodaysOverview />
+
+        <DashboardMessages />
+      </Box>
+      <DashboardActiveCourses />
     </Box>
   );
 };

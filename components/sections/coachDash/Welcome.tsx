@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 
 export const DashboardWelcome = () => {
   return (
@@ -33,6 +33,21 @@ export const DashboardWelcome = () => {
         >
           You have 6 active courses and 2 trainees requiring attention.
         </Typography>
+      </Box>
+      <Box>
+        <Button
+          sx={{
+            backgroundColor: "primary.main",
+            borderRadius: 1,
+            px: 3,
+            color: "primary.contrastText",
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+          }}
+        >
+          + New program
+        </Button>
       </Box>
     </Box>
   );
