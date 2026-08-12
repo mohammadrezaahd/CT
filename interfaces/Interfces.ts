@@ -1,4 +1,4 @@
-// Coach dashboard interfaces
+// Coach dashboard & profile interfaces
 
 export type UserRole = "COACH" | "TRAINEE";
 
@@ -82,4 +82,150 @@ export enum CourseLevel {
   EZ = "Easy",
   MED = "Medium",
   HARD = "Hard",
+}
+
+export enum IPublishStatus {
+  DRAFT = "Draft",
+  UPCOMING = "Upcoming",
+  ACTIVE = "Active",
+  COMPLETED = "Completed",
+  CANCELLED = "Cancelled",
+}
+
+// Course interfaces
+export interface ICourseSummary extends IActiveCourse {
+  trainee: ITraineeSummary;
+
+  publishStatus: IPublishStatus;
+
+  startDate: string;
+  endDate: string;
+
+  programsCount: number;
+  milestonesCount: number;
+}
+
+export interface ICourseDetails extends ICourseSummary {
+  description?: string;
+
+  programs: IProgramSummary[];
+  milestones: ICourseMilestone[];
+
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ICourseMilestone {
+  id: string;
+  title: string;
+
+  courseId: string;
+
+  dueDate: string;
+
+  order: number;
+}
+
+export interface ITraineeSummary {
+  id: string;
+  firstName: string;
+  lastName: string;
+  avatar?: string;
+}
+
+// Program interfaces
+
+export enum ProgramBlockType {
+  SINGLE = "Single",
+  SUPERSET = "Superset",
+}
+
+export enum WeightUnit {
+  KG = "kg",
+  LB = "lb",
+}
+
+export interface IProgramSummary {
+  id: string;
+  courseId: string;
+
+  title: string;
+
+  status: IPublishStatus;
+
+  order: number;
+
+  sectionsCount: number;
+  exercisesCount: number;
+}
+
+export interface IProgramDetails extends IProgramSummary {
+  description?: string;
+
+  sections: IProgramSection[];
+
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IProgramSection {
+  id: string;
+  programId: string;
+
+  title: string;
+  description?: string;
+
+  order: number;
+
+  blocks: IProgramBlock[];
+}
+
+export interface IProgramBlock {
+  id: string;
+  sectionId: string;
+
+  type: ProgramBlockType;
+
+  order: number;
+
+  exercises: IProgramExercise[];
+}
+
+export interface IProgramExercise {
+  id: string;
+  blockId: string;
+
+  title: string;
+  description?: string;
+
+  media?: IProgramExerciseMedia[];
+
+  order: number;
+
+  sets: IProgramSet[];
+}
+
+export interface IProgramSet {
+  id: string;
+  exerciseId: string;
+
+  order: number;
+
+  reps?: number;
+
+  weight?: number;
+  weightUnit?: WeightUnit;
+}
+
+export interface IProgramExerciseMedia {
+  id: string;
+
+  type: ProgramMediaType;
+
+  url: string;
+}
+
+export enum ProgramMediaType {
+  IMAGE = "Image",
+  VIDEO = "Video",
 }
