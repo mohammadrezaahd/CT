@@ -6,6 +6,7 @@ import { Box } from "@mui/material";
 import { ICourseSummary, IPublishStatus } from "@/interfaces";
 import { coachCoursesData } from "@/public/fakeData/courses";
 import { CoursesFilters } from "./CoursesFilters";
+import { CoursesCreateAction } from "./CoursesCreateAction";
 import { CoursesHeader } from "./CoursesHeader";
 import { CoursesList } from "./CoursesList";
 import { courseMatchesDateRange } from "./shared";
@@ -60,6 +61,7 @@ export const CoursesCatalog = () => {
       />
 
       <CoursesList courses={filteredCourses} />
+      <CoursesCreateAction />
     </Box>
   );
 };

@@ -1,8 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { Box, Button, Typography } from "@mui/material";
 import { CourseStatus } from "@/interfaces";
 import { coachDashboardData } from "@/public/fakeData/coachDashboard";
+import { dashboardBaseRoute } from "@/public/consts/dashboardItems";
 
 export const DashboardWelcome = () => {
   const activeCoursesCount = coachDashboardData.activeCourses.length;
@@ -44,6 +46,8 @@ export const DashboardWelcome = () => {
       </Box>
       <Box>
         <Button
+          component={Link}
+          href={`${dashboardBaseRoute}/courses/new`}
           sx={{
             backgroundColor: "primary.main",
             borderRadius: 1,
@@ -54,7 +58,7 @@ export const DashboardWelcome = () => {
             gap: 1,
           }}
         >
-          + New program
+          + New course
         </Button>
       </Box>
     </Box>
