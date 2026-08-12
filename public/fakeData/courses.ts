@@ -1,6 +1,9 @@
 import {
   CourseStatus,
+  ICourseDetails,
   ICourseSummary,
+  IProgramSummary,
+  ICourseMilestone,
   IPublishStatus,
 } from "@/interfaces";
 
@@ -158,3 +161,64 @@ export const coachCoursesData: ICourseSummary[] = [
     milestonesCount: 4,
   },
 ];
+
+const buildProgramSummaries = (course: ICourseSummary): IProgramSummary[] => {
+  const statusCycle: IPublishStatus[] = [
+    IPublishStatus.ACTIVE,
+    IPublishStatus.DRAFT,
+    IPublishStatus.UPCOMING,
+    IPublishStatus.COMPLETED,
+  ];
+
+  return Array.from({ length: course.programsCount }, (_, index) => {
+    const status =
+      course.publishStatus === IPublishStatus.CANCELLED
+        ? IPublishStatus.CANCELLED
+        : course.publishStatus === IPublishStatus.DRAFT
+          ? IPublishStatus.DRAFT
+          : course.publishStatus === IPublishStatus.UPCOMING
+            ? IPublishStatus.UPCOMING
+            : statusCycle[index % statusCycle.length];
+
+    return {
+      id: `${course.id}-program-${index + 1}`,
+      courseId: course.id,
+      title: `Program ${index + 1}`,
+      status,
+      order: index + 1,
+      sectionsCount: 2 + (index % 3),
+      exercisesCount: 8 + index * 2,
+    };
+  });
+};
+
+const buildMilestones = (course: ICourseSummary): ICourseMilestone[] => {
+  const start = new Date(course.startDate).getTime();
+  const end = new Date(course.endDate).getTime();
+  const safeRange = Math.max(end - start, 1);
+
+  return Array.from({ length: course.milestonesCount }, (_, index) => {
+    const ratio = (index + 1) / (course.milestonesCount + 1);
+    const dueDate = new Date(start + safeRange * ratio).toISOString();
+
+    return {
+      id: `${course.id}-milestone-${index + 1}`,
+      title: `Milestone ${index + 1}`,
+      courseId: course.id,
+      dueDate,
+      order: index + 1,
+    };
+  });
+};
+
+export const coachCourseDetailsData: ICourseDetails[] = coachCoursesData.map((course) => ({
+  ...course,
+  description: `${course.title} is tailored for ${course.trainee.firstName} ${course.trainee.lastName} with a focus on measurable weekly progress and recovery discipline.`,
+  programs: buildProgramSummaries(course),
+  milestones: buildMilestones(course),
+  createdAt: new Date(new Date(course.startDate).getTime() - 1000 * 60 * 60 * 24 * 14).toISOString(),
+  updatedAt: new Date().toISOString(),
+}));
+
+export const getCoachCourseDetailsById = (courseId: string) =>
+  coachCourseDetailsData.find((course) => course.id === courseId) ?? null;

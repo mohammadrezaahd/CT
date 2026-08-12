@@ -1,7 +1,10 @@
 "use client";
 
+import Link from "next/link";
+import { dashboardBaseRoute } from "@/public/consts/dashboardItems";
 import { AccessTimeRounded, FlagRounded } from "@mui/icons-material";
-import { Avatar, Box, Card, Chip, Stack, Typography, useTheme } from "@mui/material";
+import { ArrowForwardRounded } from "@mui/icons-material";
+import { Avatar, Box, Button, Card, Chip, Stack, Typography, useTheme } from "@mui/material";
 
 import { ICourseSummary } from "@/interfaces";
 import {
@@ -125,6 +128,18 @@ export const CourseCard = ({ course }: { course: ICourseSummary }) => {
               {course.milestonesCount}
             </Typography>
           </Box>
+        </Box>
+
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <Button
+            component={Link}
+            href={`${dashboardBaseRoute}/courses/${course.id}`}
+            size="small"
+            endIcon={<ArrowForwardRounded fontSize="small" />}
+            sx={{ px: 1.5 }}
+          >
+            View details
+          </Button>
         </Box>
       </Stack>
     </Card>
