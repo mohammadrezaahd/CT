@@ -1,5 +1,10 @@
 import { IActiveCourse } from "./Coach.interface";
-import { IPublishStatus, ProgramItemType, WeightUnit } from "./Common.interface";
+import {
+  IPublishStatus,
+  ProgramDurationUnit,
+  ProgramItemType,
+  WeightUnit,
+} from "./Common.interface";
 import { IProgramSummary } from "./Program.interface";
 
 export interface ICourseSummary extends IActiveCourse {
@@ -74,40 +79,58 @@ export interface ICourseCreateProgramSectionInput {
 
 export type ICourseCreateProgramItemInput =
   | ICourseCreateProgramExerciseInput
-  | ICourseCreateProgramSupersetInput;
+  | ICourseCreateProgramGroupInput;
+
+export interface ICourseCreateExerciseFieldSelection {
+  reps: boolean;
+  weight: boolean;
+  description: boolean;
+  equipment: boolean;
+  duration: boolean;
+}
 
 export interface ICourseCreateProgramExerciseInput {
   id: string;
   type: ProgramItemType.EXERCISE;
   title: string;
+  description?: string;
+  equipment?: string;
+  duration?: number;
+  durationUnit?: ProgramDurationUnit;
+  fieldSelection: ICourseCreateExerciseFieldSelection;
   order: number;
   sets: ICourseCreateProgramSetInput[];
 }
 
-export interface ICourseCreateProgramSupersetInput {
+export interface ICourseCreateProgramGroupInput {
   id: string;
-  type: ProgramItemType.SUPERSET;
+  type: ProgramItemType.GROUP;
   title: string;
   order: number;
   rounds: number;
-  exercises: ICourseCreateProgramSupersetExerciseInput[];
+  exercises: ICourseCreateProgramGroupExerciseInput[];
 }
 
 export interface ICourseCreateProgramSetInput {
   id: string;
   order: number;
-  reps: number;
-  weight: number;
-  weightUnit: WeightUnit;
+  reps?: number;
+  weight?: number;
+  weightUnit?: WeightUnit;
 }
 
-export interface ICourseCreateProgramSupersetExerciseInput {
+export interface ICourseCreateProgramGroupExerciseInput {
   id: string;
   title: string;
+  description?: string;
+  equipment?: string;
+  duration?: number;
+  durationUnit?: ProgramDurationUnit;
+  fieldSelection: ICourseCreateExerciseFieldSelection;
   order: number;
-  reps: number;
-  weight: number;
-  weightUnit: WeightUnit;
+  reps?: number;
+  weight?: number;
+  weightUnit?: WeightUnit;
 }
 
 export interface ICourseMilestone {

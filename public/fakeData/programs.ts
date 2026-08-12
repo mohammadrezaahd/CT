@@ -1,11 +1,12 @@
 import {
+  ProgramDurationUnit,
   IProgramDetails,
   IProgramExercise,
+  IProgramGroup,
+  IProgramGroupExercise,
   IProgramSection,
   IProgramSectionItem,
   IProgramSet,
-  IProgramSuperset,
-  IProgramSupersetExercise,
   ProgramItemType,
   WeightUnit,
 } from "@/interfaces";
@@ -34,23 +35,29 @@ const buildExerciseItem = (
     type: ProgramItemType.EXERCISE,
     title: `Exercise ${itemOrder}`,
     description: "Controlled tempo with strict form.",
+    equipment: "Dumbbell",
+    duration: 45,
+    durationUnit: ProgramDurationUnit.SECOND,
     order: itemOrder,
     sets: buildSets(exerciseId, 1),
   };
 };
 
-const buildSupersetExercises = (
-  supersetId: string,
+const buildGroupExercises = (
+  groupId: string,
   count: number,
-): IProgramSupersetExercise[] => {
+): IProgramGroupExercise[] => {
   return Array.from({ length: count }, (_, index) => {
-    const exerciseId = `${supersetId}-exercise-${index + 1}`;
+    const exerciseId = `${groupId}-exercise-${index + 1}`;
 
     return {
       id: exerciseId,
-      supersetId,
-      title: `Superset Exercise ${index + 1}`,
+      groupId,
+      title: `Group Exercise ${index + 1}`,
       description: "Controlled tempo with strict form.",
+      equipment: "Cable",
+      duration: 30,
+      durationUnit: ProgramDurationUnit.SECOND,
       order: index + 1,
       reps: 10 + index * 2,
       weight: 20 + index * 5,
@@ -59,22 +66,22 @@ const buildSupersetExercises = (
   });
 };
 
-const buildSupersetItem = (
+const buildGroupItem = (
   sectionId: string,
   itemOrder: number,
   exerciseCount: number,
-): IProgramSuperset => {
-  const supersetId = `${sectionId}-superset-item-${itemOrder}`;
+): IProgramGroup => {
+  const groupId = `${sectionId}-group-item-${itemOrder}`;
 
   return {
-    id: supersetId,
+    id: groupId,
     sectionId,
-    type: ProgramItemType.SUPERSET,
-    title: `Superset ${itemOrder}`,
+    type: ProgramItemType.GROUP,
+    title: `Group ${itemOrder}`,
     order: itemOrder,
     rounds: 3,
-    exercises: buildSupersetExercises(
-      supersetId,
+    exercises: buildGroupExercises(
+      groupId,
       Math.max(2, Math.min(exerciseCount, 3)),
     ),
   };
@@ -89,12 +96,12 @@ const buildSectionItems = (
   let order = 1;
 
   while (remaining > 0) {
-    const shouldBuildSuperset = remaining >= 3 && order % 2 === 0;
+    const shouldBuildGroup = remaining >= 3 && order % 2 === 0;
 
-    if (shouldBuildSuperset) {
-      const supersetExerciseCount = Math.min(3, remaining - 1);
-      items.push(buildSupersetItem(sectionId, order, supersetExerciseCount));
-      remaining -= supersetExerciseCount;
+    if (shouldBuildGroup) {
+      const groupExerciseCount = Math.min(3, remaining - 1);
+      items.push(buildGroupItem(sectionId, order, groupExerciseCount));
+      remaining -= groupExerciseCount;
       order += 1;
       continue;
     }

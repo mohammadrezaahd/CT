@@ -1,4 +1,10 @@
-import { IPublishStatus, ProgramItemType, ProgramMediaType, WeightUnit } from "./Common.interface";
+import {
+  IPublishStatus,
+  ProgramDurationUnit,
+  ProgramItemType,
+  ProgramMediaType,
+  WeightUnit,
+} from "./Common.interface";
 
 export interface IProgramSummary {
   id: string;
@@ -26,7 +32,7 @@ export interface IProgramSection {
   items: IProgramSectionItem[];
 }
 
-export type IProgramSectionItem = IProgramExercise | IProgramSuperset;
+export type IProgramSectionItem = IProgramExercise | IProgramGroup;
 
 export interface IProgramExercise {
   id: string;
@@ -34,26 +40,32 @@ export interface IProgramExercise {
   type: ProgramItemType.EXERCISE;
   title: string;
   description?: string;
+  equipment?: string;
+  duration?: number;
+  durationUnit?: ProgramDurationUnit;
   media?: IProgramExerciseMedia[];
   order: number;
   sets: IProgramSet[];
 }
 
-export interface IProgramSuperset {
+export interface IProgramGroup {
   id: string;
   sectionId: string;
-  type: ProgramItemType.SUPERSET;
+  type: ProgramItemType.GROUP;
   title?: string;
   order: number;
   rounds: number;
-  exercises: IProgramSupersetExercise[];
+  exercises: IProgramGroupExercise[];
 }
 
-export interface IProgramSupersetExercise {
+export interface IProgramGroupExercise {
   id: string;
-  supersetId: string;
+  groupId: string;
   title: string;
   description?: string;
+  equipment?: string;
+  duration?: number;
+  durationUnit?: ProgramDurationUnit;
   media?: IProgramExerciseMedia[];
   order: number;
   reps?: number;

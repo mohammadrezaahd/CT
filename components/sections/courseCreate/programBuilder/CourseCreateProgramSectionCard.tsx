@@ -10,27 +10,36 @@ import {
   Box,
   Button,
   Chip,
+  FormControlLabel,
   IconButton,
   MenuItem,
   Stack,
+  Switch,
   TextField,
   Typography,
   useTheme,
 } from "@mui/material";
 
 import {
+  ICourseCreateExerciseFieldSelection,
   ICourseCreateProgramExerciseInput,
+  ICourseCreateProgramGroupInput,
+  ICourseCreateProgramGroupExerciseInput,
   ICourseCreateProgramSectionInput,
-  ICourseCreateProgramSupersetInput,
+  ProgramDurationUnit,
   ProgramItemType,
   WeightUnit,
 } from "@/interfaces";
 import {
   createProgramExerciseDraft,
-  createProgramSupersetDraft,
+  createProgramGroupDraft,
 } from "@/public/fakeData/courseCreate";
 
 const weightUnitOptions: WeightUnit[] = [WeightUnit.KG, WeightUnit.LB];
+const durationUnitOptions: ProgramDurationUnit[] = [
+  ProgramDurationUnit.SECOND,
+  ProgramDurationUnit.MINUTE,
+];
 
 interface CourseCreateProgramSectionCardProps {
   section: ICourseCreateProgramSectionInput;
@@ -42,9 +51,9 @@ const isExerciseItem = (
   item: ICourseCreateProgramSectionInput["items"][number],
 ): item is ICourseCreateProgramExerciseInput => item.type === ProgramItemType.EXERCISE;
 
-const isSupersetItem = (
+const isGroupItem = (
   item: ICourseCreateProgramSectionInput["items"][number],
-): item is ICourseCreateProgramSupersetInput => item.type === ProgramItemType.SUPERSET;
+): item is ICourseCreateProgramGroupInput => item.type === ProgramItemType.GROUP;
 
 export const CourseCreateProgramSectionCard = ({
   section,
@@ -74,12 +83,12 @@ export const CourseCreateProgramSectionCard = ({
     });
   };
 
-  const addSupersetItem = () => {
+  const addGroupItem = () => {
     const order = section.items.length + 1;
 
     onChange({
       ...section,
-      items: [...section.items, createProgramSupersetDraft(order)],
+      items: [...section.items, createProgramGroupDraft(order)],
     });
   };
 
@@ -100,7 +109,7 @@ export const CourseCreateProgramSectionCard = ({
   const updateExercisePrimarySet = (
     exerciseId: string,
     field: "reps" | "weight" | "weightUnit",
-    fieldValue: number | WeightUnit,
+    fieldValue: number | WeightUnit | undefined,
   ) => {
     updateItem(exerciseId, (currentItem) => {
       if (!isExerciseItem(currentItem)) {
@@ -110,9 +119,9 @@ export const CourseCreateProgramSectionCard = ({
       const baseSet = currentItem.sets[0] ?? {
         id: `set-${Date.now()}`,
         order: 1,
-        reps: 10,
-        weight: 20,
-        weightUnit: WeightUnit.KG,
+        reps: undefined,
+        weight: undefined,
+        weightUnit: undefined,
       };
 
       const nextSet = {
@@ -123,6 +132,124 @@ export const CourseCreateProgramSectionCard = ({
       return {
         ...currentItem,
         sets: [nextSet],
+      };
+    });
+  };
+
+  const toggleExerciseField = (
+    exerciseId: string,
+    key: keyof ICourseCreateExerciseFieldSelection,
+  ) => {
+    updateItem(exerciseId, (currentItem) => {
+      if (!isExerciseItem(currentItem)) {
+        return currentItem;
+      }
+
+      const nextEnabled = !currentItem.fieldSelection[key];
+      const nextItem: ICourseCreateProgramExerciseInput = {
+        ...currentItem,
+        fieldSelection: {
+          ...currentItem.fieldSelection,
+          [key]: nextEnabled,
+        },
+      };
+
+      if (key === "description" && !nextEnabled) {
+        nextItem.description = "";
+      }
+
+      if (key === "equipment" && !nextEnabled) {
+        nextItem.equipment = "";
+      }
+
+      if (key === "duration" && !nextEnabled) {
+        nextItem.duration = undefined;
+      }
+
+      if (key === "reps" || key === "weight") {
+        const baseSet = nextItem.sets[0] ?? {
+          id: `set-${Date.now()}`,
+          order: 1,
+          reps: undefined,
+          weight: undefined,
+          weightUnit: undefined,
+        };
+
+        const nextSet = { ...baseSet };
+
+        if (key === "reps" && !nextEnabled) {
+          nextSet.reps = undefined;
+        }
+
+        if (key === "weight" && !nextEnabled) {
+          nextSet.weight = undefined;
+          nextSet.weightUnit = undefined;
+        }
+
+        if (key === "weight" && nextEnabled && !nextSet.weightUnit) {
+          nextSet.weightUnit = WeightUnit.KG;
+        }
+
+        nextItem.sets = [nextSet];
+      }
+
+      return nextItem;
+    });
+  };
+
+  const toggleGroupExerciseField = (
+    itemId: string,
+    exerciseId: string,
+    key: keyof ICourseCreateExerciseFieldSelection,
+  ) => {
+    updateItem(itemId, (currentItem) => {
+      if (!isGroupItem(currentItem)) {
+        return currentItem;
+      }
+
+      return {
+        ...currentItem,
+        exercises: currentItem.exercises.map((exercise) => {
+          if (exercise.id !== exerciseId) {
+            return exercise;
+          }
+
+          const nextEnabled = !exercise.fieldSelection[key];
+          const nextExercise: ICourseCreateProgramGroupExerciseInput = {
+            ...exercise,
+            fieldSelection: {
+              ...exercise.fieldSelection,
+              [key]: nextEnabled,
+            },
+          };
+
+          if (key === "description" && !nextEnabled) {
+            nextExercise.description = "";
+          }
+
+          if (key === "equipment" && !nextEnabled) {
+            nextExercise.equipment = "";
+          }
+
+          if (key === "duration" && !nextEnabled) {
+            nextExercise.duration = undefined;
+          }
+
+          if (key === "reps" && !nextEnabled) {
+            nextExercise.reps = undefined;
+          }
+
+          if (key === "weight" && !nextEnabled) {
+            nextExercise.weight = undefined;
+            nextExercise.weightUnit = undefined;
+          }
+
+          if (key === "weight" && nextEnabled && !nextExercise.weightUnit) {
+            nextExercise.weightUnit = WeightUnit.KG;
+          }
+
+          return nextExercise;
+        }),
       };
     });
   };
@@ -182,8 +309,8 @@ export const CourseCreateProgramSectionCard = ({
         <Button size="small" startIcon={<FitnessCenterRounded />} onClick={addExerciseItem}>
           Add exercise
         </Button>
-        <Button size="small" startIcon={<RepeatRounded />} onClick={addSupersetItem}>
-          Add superset
+        <Button size="small" startIcon={<RepeatRounded />} onClick={addGroupItem}>
+          Add group
         </Button>
       </Stack>
 
@@ -196,9 +323,9 @@ export const CourseCreateProgramSectionCard = ({
               const primarySet = item.sets[0] ?? {
                 id: `set-${item.id}`,
                 order: 1,
-                reps: 10,
-                weight: 20,
-                weightUnit: WeightUnit.KG,
+                reps: undefined,
+                weight: undefined,
+                weightUnit: undefined,
               };
 
               return (
@@ -207,7 +334,7 @@ export const CourseCreateProgramSectionCard = ({
                   sx={{
                     display: "grid",
                     gap: 1,
-                    gridTemplateColumns: { xs: "1fr", md: "1.3fr 0.7fr 0.7fr 0.6fr auto" },
+                    gridTemplateColumns: { xs: "1fr", md: "1.2fr auto" },
                     p: 1.25,
                     border: "1px solid",
                     borderColor: "divider",
@@ -228,50 +355,6 @@ export const CourseCreateProgramSectionCard = ({
                     fullWidth
                   />
 
-                  <TextField
-                    label="Reps"
-                    type="number"
-                    value={primarySet.reps}
-                    onChange={(event) =>
-                      updateExercisePrimarySet(
-                        item.id,
-                        "reps",
-                        Math.max(Number(event.target.value) || 0, 0),
-                      )
-                    }
-                    fullWidth
-                  />
-
-                  <TextField
-                    label="Weight"
-                    type="number"
-                    value={primarySet.weight}
-                    onChange={(event) =>
-                      updateExercisePrimarySet(
-                        item.id,
-                        "weight",
-                        Math.max(Number(event.target.value) || 0, 0),
-                      )
-                    }
-                    fullWidth
-                  />
-
-                  <TextField
-                    select
-                    label="Unit"
-                    value={primarySet.weightUnit}
-                    onChange={(event) =>
-                      updateExercisePrimarySet(item.id, "weightUnit", event.target.value as WeightUnit)
-                    }
-                    fullWidth
-                  >
-                    {weightUnitOptions.map((unit) => (
-                      <MenuItem key={unit} value={unit}>
-                        {unit}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-
                   <IconButton
                     aria-label="remove item"
                     onClick={() => removeItem(item.id)}
@@ -279,6 +362,186 @@ export const CourseCreateProgramSectionCard = ({
                   >
                     <DeleteOutlineRounded fontSize="small" />
                   </IconButton>
+
+                  <Stack
+                    direction="row"
+                    spacing={1.25}
+                    useFlexGap
+                    sx={{ gridColumn: "1 / -1", flexWrap: "wrap", mt: 0.5 }}
+                  >
+                    {([
+                      ["reps", "Reps"],
+                      ["weight", "Weight"],
+                      ["description", "Description"],
+                      ["equipment", "Equipment"],
+                      ["duration", "Duration"],
+                    ] as const).map(([key, label]) => (
+                      <FormControlLabel
+                        key={key}
+                        control={(
+                          <Switch
+                            size="small"
+                            checked={item.fieldSelection[key]}
+                            onChange={() => toggleExerciseField(item.id, key)}
+                          />
+                        )}
+                        label={label}
+                        sx={{ mr: 0.5 }}
+                      />
+                    ))}
+                  </Stack>
+
+                  <Box
+                    sx={{
+                      gridColumn: "1 / -1",
+                      display: "grid",
+                      gap: 1,
+                      gridTemplateColumns: {
+                        xs: "1fr",
+                        md:
+                          item.fieldSelection.weight && item.fieldSelection.duration
+                            ? "1fr 1fr 1fr 1fr"
+                            : item.fieldSelection.weight || item.fieldSelection.duration
+                              ? "1fr 1fr 1fr"
+                              : "1fr 1fr",
+                      },
+                    }}
+                  >
+                    {item.fieldSelection.reps ? (
+                      <TextField
+                        label="Reps"
+                        type="number"
+                        value={primarySet.reps ?? ""}
+                        onChange={(event) =>
+                          updateExercisePrimarySet(
+                            item.id,
+                            "reps",
+                            event.target.value === ""
+                              ? undefined
+                              : Math.max(Number(event.target.value) || 0, 0),
+                          )
+                        }
+                        fullWidth
+                      />
+                    ) : null}
+
+                    {item.fieldSelection.weight ? (
+                      <>
+                        <TextField
+                          label="Weight"
+                          type="number"
+                          value={primarySet.weight ?? ""}
+                          onChange={(event) =>
+                            updateExercisePrimarySet(
+                              item.id,
+                              "weight",
+                              event.target.value === ""
+                                ? undefined
+                                : Math.max(Number(event.target.value) || 0, 0),
+                            )
+                          }
+                          fullWidth
+                        />
+                        <TextField
+                          select
+                          label="Unit"
+                          value={primarySet.weightUnit ?? WeightUnit.KG}
+                          onChange={(event) =>
+                            updateExercisePrimarySet(item.id, "weightUnit", event.target.value as WeightUnit)
+                          }
+                          fullWidth
+                        >
+                          {weightUnitOptions.map((unit) => (
+                            <MenuItem key={unit} value={unit}>
+                              {unit}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                      </>
+                    ) : null}
+
+                    {item.fieldSelection.duration ? (
+                      <>
+                        <TextField
+                          label="Duration"
+                          type="number"
+                          value={item.duration ?? ""}
+                          onChange={(event) =>
+                            updateItem(item.id, (currentItem) => {
+                              if (!isExerciseItem(currentItem)) {
+                                return currentItem;
+                              }
+
+                              return {
+                                ...currentItem,
+                                duration:
+                                  event.target.value === ""
+                                    ? undefined
+                                    : Math.max(Number(event.target.value) || 0, 0),
+                              };
+                            })
+                          }
+                          fullWidth
+                        />
+                        <TextField
+                          select
+                          label="Duration unit"
+                          value={item.durationUnit ?? ProgramDurationUnit.MINUTE}
+                          onChange={(event) =>
+                            updateItem(item.id, (currentItem) => {
+                              if (!isExerciseItem(currentItem)) {
+                                return currentItem;
+                              }
+
+                              return {
+                                ...currentItem,
+                                durationUnit: event.target.value as ProgramDurationUnit,
+                              };
+                            })
+                          }
+                          fullWidth
+                        >
+                          {durationUnitOptions.map((unit) => (
+                            <MenuItem key={unit} value={unit}>
+                              {unit}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                      </>
+                    ) : null}
+                  </Box>
+
+                  {item.fieldSelection.description ? (
+                    <TextField
+                      label="Description"
+                      value={item.description ?? ""}
+                      onChange={(event) =>
+                        updateItem(item.id, (currentItem) => ({
+                          ...currentItem,
+                          description: event.target.value,
+                        }))
+                      }
+                      fullWidth
+                      multiline
+                      minRows={2}
+                      sx={{ gridColumn: "1 / -1" }}
+                    />
+                  ) : null}
+
+                  {item.fieldSelection.equipment ? (
+                    <TextField
+                      label="Equipment"
+                      value={item.equipment ?? ""}
+                      onChange={(event) =>
+                        updateItem(item.id, (currentItem) => ({
+                          ...currentItem,
+                          equipment: event.target.value,
+                        }))
+                      }
+                      fullWidth
+                      sx={{ gridColumn: "1 / -1" }}
+                    />
+                  ) : null}
                 </Box>
               );
             }
@@ -305,7 +568,7 @@ export const CourseCreateProgramSectionCard = ({
                     </Typography>
                     <Chip
                       size="small"
-                      label="Superset"
+                      label="Group"
                       sx={{
                         borderRadius: theme.shape.rounded.square,
                         backgroundColor: "background.paper",
@@ -336,7 +599,7 @@ export const CourseCreateProgramSectionCard = ({
                   fullWidth
                 />
 
-              {isSupersetItem(item) ? (
+              {isGroupItem(item) ? (
                 <>
                   <Box
                     sx={{
@@ -352,7 +615,7 @@ export const CourseCreateProgramSectionCard = ({
                       value={item.rounds}
                       onChange={(event) =>
                         updateItem(item.id, (currentItem) => {
-                          if (!isSupersetItem(currentItem)) {
+                          if (!isGroupItem(currentItem)) {
                             return currentItem;
                           }
 
@@ -370,7 +633,7 @@ export const CourseCreateProgramSectionCard = ({
                       startIcon={<AddRounded />}
                       onClick={() =>
                         updateItem(item.id, (currentItem) => {
-                          if (!isSupersetItem(currentItem)) {
+                          if (!isGroupItem(currentItem)) {
                             return currentItem;
                           }
 
@@ -379,8 +642,19 @@ export const CourseCreateProgramSectionCard = ({
                             exercises: [
                               ...currentItem.exercises,
                               {
-                                id: `superset-exercise-${Date.now()}`,
-                                title: `Superset Exercise ${currentItem.exercises.length + 1}`,
+                                id: `group-exercise-${Date.now()}`,
+                                title: `Group Exercise ${currentItem.exercises.length + 1}`,
+                                description: "",
+                                equipment: "",
+                                duration: undefined,
+                                durationUnit: ProgramDurationUnit.MINUTE,
+                                fieldSelection: {
+                                  reps: true,
+                                  weight: true,
+                                  description: false,
+                                  equipment: false,
+                                  duration: false,
+                                },
                                 order: currentItem.exercises.length + 1,
                                 reps: 10,
                                 weight: 10,
@@ -419,7 +693,7 @@ export const CourseCreateProgramSectionCard = ({
                             value={exercise.title}
                             onChange={(event) =>
                               updateItem(item.id, (currentItem) => {
-                                if (!isSupersetItem(currentItem)) {
+                                if (!isGroupItem(currentItem)) {
                                   return currentItem;
                                 }
 
@@ -438,93 +712,256 @@ export const CourseCreateProgramSectionCard = ({
                             }
                             fullWidth
                           />
-                          <TextField
-                            label="Reps"
-                            type="number"
-                            value={exercise.reps}
-                            onChange={(event) =>
-                              updateItem(item.id, (currentItem) => {
-                                if (!isSupersetItem(currentItem)) {
-                                  return currentItem;
-                                }
 
-                                return {
-                                  ...currentItem,
-                                  exercises: currentItem.exercises.map((currentExercise) =>
-                                    currentExercise.id === exercise.id
-                                      ? {
-                                          ...currentExercise,
-                                          reps: Math.max(Number(event.target.value) || 0, 0),
-                                        }
-                                      : currentExercise,
-                                  ),
-                                };
-                              })
-                            }
-                            fullWidth
-                          />
-                          <TextField
-                            label="Weight"
-                            type="number"
-                            value={exercise.weight}
-                            onChange={(event) =>
-                              updateItem(item.id, (currentItem) => {
-                                if (!isSupersetItem(currentItem)) {
-                                  return currentItem;
-                                }
-
-                                return {
-                                  ...currentItem,
-                                  exercises: currentItem.exercises.map((currentExercise) =>
-                                    currentExercise.id === exercise.id
-                                      ? {
-                                          ...currentExercise,
-                                          weight: Math.max(Number(event.target.value) || 0, 0),
-                                        }
-                                      : currentExercise,
-                                  ),
-                                };
-                              })
-                            }
-                            fullWidth
-                          />
-                          <TextField
-                            select
-                            label="Unit"
-                            value={exercise.weightUnit}
-                            onChange={(event) =>
-                              updateItem(item.id, (currentItem) => {
-                                if (!isSupersetItem(currentItem)) {
-                                  return currentItem;
-                                }
-
-                                return {
-                                  ...currentItem,
-                                  exercises: currentItem.exercises.map((currentExercise) =>
-                                    currentExercise.id === exercise.id
-                                      ? {
-                                          ...currentExercise,
-                                          weightUnit: event.target.value as WeightUnit,
-                                        }
-                                      : currentExercise,
-                                  ),
-                                };
-                              })
-                            }
-                            fullWidth
+                          <Stack
+                            direction="row"
+                            spacing={1}
+                            useFlexGap
+                            sx={{ gridColumn: "1 / -1", flexWrap: "wrap" }}
                           >
-                            {weightUnitOptions.map((unit) => (
-                              <MenuItem key={unit} value={unit}>
-                                {unit}
-                              </MenuItem>
+                            {([
+                              ["reps", "Reps"],
+                              ["weight", "Weight"],
+                              ["description", "Description"],
+                              ["equipment", "Equipment"],
+                              ["duration", "Duration"],
+                            ] as const).map(([key, label]) => (
+                              <FormControlLabel
+                                key={key}
+                                control={(
+                                  <Switch
+                                    size="small"
+                                    checked={exercise.fieldSelection[key]}
+                                    onChange={() => toggleGroupExerciseField(item.id, exercise.id, key)}
+                                  />
+                                )}
+                                label={label}
+                              />
                             ))}
-                          </TextField>
+                          </Stack>
+
+                          {exercise.fieldSelection.reps ? (
+                            <TextField
+                              label="Reps"
+                              type="number"
+                              value={exercise.reps ?? ""}
+                              onChange={(event) =>
+                                updateItem(item.id, (currentItem) => {
+                                  if (!isGroupItem(currentItem)) {
+                                    return currentItem;
+                                  }
+
+                                  return {
+                                    ...currentItem,
+                                    exercises: currentItem.exercises.map((currentExercise) =>
+                                      currentExercise.id === exercise.id
+                                        ? {
+                                            ...currentExercise,
+                                            reps:
+                                              event.target.value === ""
+                                                ? undefined
+                                                : Math.max(Number(event.target.value) || 0, 0),
+                                          }
+                                        : currentExercise,
+                                    ),
+                                  };
+                                })
+                              }
+                              fullWidth
+                            />
+                          ) : null}
+
+                          {exercise.fieldSelection.weight ? (
+                            <>
+                              <TextField
+                                label="Weight"
+                                type="number"
+                                value={exercise.weight ?? ""}
+                                onChange={(event) =>
+                                  updateItem(item.id, (currentItem) => {
+                                    if (!isGroupItem(currentItem)) {
+                                      return currentItem;
+                                    }
+
+                                    return {
+                                      ...currentItem,
+                                      exercises: currentItem.exercises.map((currentExercise) =>
+                                        currentExercise.id === exercise.id
+                                          ? {
+                                              ...currentExercise,
+                                              weight:
+                                                event.target.value === ""
+                                                  ? undefined
+                                                  : Math.max(Number(event.target.value) || 0, 0),
+                                            }
+                                          : currentExercise,
+                                      ),
+                                    };
+                                  })
+                                }
+                                fullWidth
+                              />
+                              <TextField
+                                select
+                                label="Unit"
+                                value={exercise.weightUnit ?? WeightUnit.KG}
+                                onChange={(event) =>
+                                  updateItem(item.id, (currentItem) => {
+                                    if (!isGroupItem(currentItem)) {
+                                      return currentItem;
+                                    }
+
+                                    return {
+                                      ...currentItem,
+                                      exercises: currentItem.exercises.map((currentExercise) =>
+                                        currentExercise.id === exercise.id
+                                          ? {
+                                              ...currentExercise,
+                                              weightUnit: event.target.value as WeightUnit,
+                                            }
+                                          : currentExercise,
+                                      ),
+                                    };
+                                  })
+                                }
+                                fullWidth
+                              >
+                                {weightUnitOptions.map((unit) => (
+                                  <MenuItem key={unit} value={unit}>
+                                    {unit}
+                                  </MenuItem>
+                                ))}
+                              </TextField>
+                            </>
+                          ) : null}
+
+                          {exercise.fieldSelection.duration ? (
+                            <>
+                              <TextField
+                                label="Duration"
+                                type="number"
+                                value={exercise.duration ?? ""}
+                                onChange={(event) =>
+                                  updateItem(item.id, (currentItem) => {
+                                    if (!isGroupItem(currentItem)) {
+                                      return currentItem;
+                                    }
+
+                                    return {
+                                      ...currentItem,
+                                      exercises: currentItem.exercises.map((currentExercise) =>
+                                        currentExercise.id === exercise.id
+                                          ? {
+                                              ...currentExercise,
+                                              duration:
+                                                event.target.value === ""
+                                                  ? undefined
+                                                  : Math.max(Number(event.target.value) || 0, 0),
+                                            }
+                                          : currentExercise,
+                                      ),
+                                    };
+                                  })
+                                }
+                                fullWidth
+                              />
+                              <TextField
+                                select
+                                label="Duration unit"
+                                value={exercise.durationUnit ?? ProgramDurationUnit.MINUTE}
+                                onChange={(event) =>
+                                  updateItem(item.id, (currentItem) => {
+                                    if (!isGroupItem(currentItem)) {
+                                      return currentItem;
+                                    }
+
+                                    return {
+                                      ...currentItem,
+                                      exercises: currentItem.exercises.map((currentExercise) =>
+                                        currentExercise.id === exercise.id
+                                          ? {
+                                              ...currentExercise,
+                                              durationUnit: event.target.value as ProgramDurationUnit,
+                                            }
+                                          : currentExercise,
+                                      ),
+                                    };
+                                  })
+                                }
+                                fullWidth
+                              >
+                                {durationUnitOptions.map((unit) => (
+                                  <MenuItem key={unit} value={unit}>
+                                    {unit}
+                                  </MenuItem>
+                                ))}
+                              </TextField>
+                            </>
+                          ) : null}
+
+                          {exercise.fieldSelection.description ? (
+                            <TextField
+                              label="Description"
+                              value={exercise.description ?? ""}
+                              onChange={(event) =>
+                                updateItem(item.id, (currentItem) => {
+                                  if (!isGroupItem(currentItem)) {
+                                    return currentItem;
+                                  }
+
+                                  return {
+                                    ...currentItem,
+                                    exercises: currentItem.exercises.map((currentExercise) =>
+                                      currentExercise.id === exercise.id
+                                        ? {
+                                            ...currentExercise,
+                                            description: event.target.value,
+                                          }
+                                        : currentExercise,
+                                    ),
+                                  };
+                                })
+                              }
+                              fullWidth
+                              multiline
+                              minRows={2}
+                              sx={{ gridColumn: "1 / -1" }}
+                            />
+                          ) : null}
+
+                          {exercise.fieldSelection.equipment ? (
+                            <TextField
+                              label="Equipment"
+                              value={exercise.equipment ?? ""}
+                              onChange={(event) =>
+                                updateItem(item.id, (currentItem) => {
+                                  if (!isGroupItem(currentItem)) {
+                                    return currentItem;
+                                  }
+
+                                  return {
+                                    ...currentItem,
+                                    exercises: currentItem.exercises.map((currentExercise) =>
+                                      currentExercise.id === exercise.id
+                                        ? {
+                                            ...currentExercise,
+                                            equipment: event.target.value,
+                                          }
+                                        : currentExercise,
+                                    ),
+                                  };
+                                })
+                              }
+                              fullWidth
+                              sx={{ gridColumn: "1 / -1" }}
+                            />
+                          ) : null}
 
                           <IconButton
-                            aria-label="remove superset exercise"
+                            aria-label="remove group exercise"
                             onClick={() =>
                               updateItem(item.id, (currentItem) => {
-                                if (!isSupersetItem(currentItem)) {
+                                if (!isGroupItem(currentItem)) {
                                   return currentItem;
                                 }
 

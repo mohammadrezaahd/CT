@@ -74,7 +74,7 @@ export const CourseCreateProgramBuilder = ({
             Program builder
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-            Build programs directly in this course draft with editable sections, exercises, and supersets.
+            Build programs directly in this course draft with editable sections, exercises, and groups.
           </Typography>
         </Box>
 

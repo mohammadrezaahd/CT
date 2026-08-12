@@ -21,19 +21,33 @@ import {
 import { ExpandMoreRounded } from "@mui/icons-material";
 
 import {
+  ProgramDurationUnit,
   IProgramDetails,
   IProgramExercise,
-  IProgramSuperset,
+  IProgramGroup,
   ProgramItemType,
 } from "@/interfaces";
 
 const formatSetValue = (value?: number) => (typeof value === "number" ? value : "-");
 
-const isExerciseItem = (item: IProgramExercise | IProgramSuperset): item is IProgramExercise =>
+const isExerciseItem = (item: IProgramExercise | IProgramGroup): item is IProgramExercise =>
   item.type === ProgramItemType.EXERCISE;
 
-const isSupersetItem = (item: IProgramExercise | IProgramSuperset): item is IProgramSuperset =>
-  item.type === ProgramItemType.SUPERSET;
+const isGroupItem = (item: IProgramExercise | IProgramGroup): item is IProgramGroup =>
+  item.type === ProgramItemType.GROUP;
+
+const formatDuration = (duration?: number, unit?: ProgramDurationUnit) => {
+  if (typeof duration !== "number") {
+    return "-";
+  }
+
+  const labelByUnit: Record<ProgramDurationUnit, string> = {
+    SECOND: "sec",
+    MINUTE: "min",
+  };
+
+  return `${duration} ${labelByUnit[unit ?? ProgramDurationUnit.SECOND]}`;
+};
 
 export const ProgramStructureAccordion = ({
   program,
@@ -56,7 +70,7 @@ export const ProgramStructureAccordion = ({
     >
       {sortedSections.map((section) => {
         const items = section.items.slice().sort((a, b) => a.order - b.order);
-        const supersetCount = items.filter((item) => isSupersetItem(item)).length;
+        const groupCount = items.filter((item) => isGroupItem(item)).length;
         const exerciseCount = items.reduce((sum, item) => {
           if (isExerciseItem(item)) {
             return sum + 1;
@@ -130,7 +144,7 @@ export const ProgramStructureAccordion = ({
                     }}
                   />
                   <Chip
-                    label={`${supersetCount} supersets`}
+                    label={`${groupCount} groups`}
                     size="small"
                     sx={{
                       borderRadius: theme.shape.rounded.square,
@@ -176,6 +190,32 @@ export const ProgramStructureAccordion = ({
                           <Typography variant="body2" sx={{ fontWeight: 700 }}>
                             {`${item.order}. ${item.title}`}
                           </Typography>
+                          <Stack direction="row" spacing={0.75} useFlexGap sx={{ flexWrap: "wrap" }}>
+                            {item.equipment ? (
+                              <Chip
+                                size="small"
+                                label={`Equipment: ${item.equipment}`}
+                                sx={{
+                                  borderRadius: theme.shape.rounded.square,
+                                  backgroundColor: "background.paper",
+                                  color: "text.secondary",
+                                  fontWeight: 700,
+                                }}
+                              />
+                            ) : null}
+                            {typeof item.duration === "number" ? (
+                              <Chip
+                                size="small"
+                                label={`Duration: ${formatDuration(item.duration, item.durationUnit)}`}
+                                sx={{
+                                  borderRadius: theme.shape.rounded.square,
+                                  backgroundColor: "background.paper",
+                                  color: "text.secondary",
+                                  fontWeight: 700,
+                                }}
+                              />
+                            ) : null}
+                          </Stack>
 
                           <Chip
                             size="small"
@@ -246,13 +286,13 @@ export const ProgramStructureAccordion = ({
                         }}
                       >
                         <Typography variant="body2" sx={{ fontWeight: 700, color: "yellow.sub" }}>
-                          {`${item.order}. ${item.title ?? "Superset"}`}
+                          {`${item.order}. ${item.title ?? "Group"}`}
                         </Typography>
 
                         <Stack direction="row" spacing={0.75} useFlexGap sx={{ flexWrap: "wrap" }}>
                           <Chip
                             size="small"
-                            label="Superset"
+                            label="Group"
                             sx={{
                               borderRadius: theme.shape.rounded.square,
                               backgroundColor: "background.paper",
@@ -282,6 +322,8 @@ export const ProgramStructureAccordion = ({
                               <TableCell sx={{ fontWeight: 700 }}>Exercise</TableCell>
                               <TableCell sx={{ fontWeight: 700 }}>Reps</TableCell>
                               <TableCell sx={{ fontWeight: 700 }}>Weight</TableCell>
+                              <TableCell sx={{ fontWeight: 700 }}>Duration</TableCell>
+                              <TableCell sx={{ fontWeight: 700 }}>Equipment</TableCell>
                             </TableRow>
                           </TableHead>
 
@@ -337,6 +379,10 @@ export const ProgramStructureAccordion = ({
                                         ? `${exercise.weight} ${String(exercise.weightUnit ?? "kg")}`
                                         : "-"}
                                     </TableCell>
+                                    <TableCell>
+                                      {formatDuration(exercise.duration, exercise.durationUnit)}
+                                    </TableCell>
+                                    <TableCell>{exercise.equipment || "-"}</TableCell>
                                   </TableRow>
                                 );
                               }),

@@ -28,7 +28,12 @@ export enum WeightUnit {
 
 export enum ProgramItemType {
   EXERCISE = "Exercise",
-  SUPERSET = "Superset",
+  GROUP = "Group",
+}
+
+export enum ProgramDurationUnit {
+  SECOND = "SECOND",
+  MINUTE = "MINUTE",
 }
 
 export enum ProgramMediaType {

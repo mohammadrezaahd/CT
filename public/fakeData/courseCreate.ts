@@ -2,13 +2,15 @@ import {
   CourseCreatePublishMode,
   CourseDurationUnit,
   ICourseCreationTraineeOption,
+  ICourseCreateExerciseFieldSelection,
   ICourseCreateProgramExerciseInput,
+  ICourseCreateProgramGroupExerciseInput,
+  ICourseCreateProgramGroupInput,
   ICourseCreateProgramInput,
   ICourseCreateProgramSectionInput,
   ICourseCreateProgramSetInput,
-  ICourseCreateProgramSupersetExerciseInput,
-  ICourseCreateProgramSupersetInput,
   ICourseCreateInput,
+  ProgramDurationUnit,
   ProgramItemType,
   WeightUnit,
 } from "@/interfaces";
@@ -36,6 +38,14 @@ export const courseDurationUnitOptions: CourseDurationUnit[] = [
 
 const createId = (prefix: string) => `${prefix}-${Math.random().toString(36).slice(2, 10)}`;
 
+const defaultExerciseFieldSelection: ICourseCreateExerciseFieldSelection = {
+  reps: true,
+  weight: true,
+  description: false,
+  equipment: false,
+  duration: false,
+};
+
 const createSetDraft = (order: number): ICourseCreateProgramSetInput => ({
   id: createId("set"),
   order,
@@ -44,11 +54,16 @@ const createSetDraft = (order: number): ICourseCreateProgramSetInput => ({
   weightUnit: WeightUnit.KG,
 });
 
-const createSupersetExerciseDraft = (
+const createGroupExerciseDraft = (
   order: number,
-): ICourseCreateProgramSupersetExerciseInput => ({
-  id: createId("superset-exercise"),
-  title: `Superset Exercise ${order}`,
+): ICourseCreateProgramGroupExerciseInput => ({
+  id: createId("group-exercise"),
+  title: `Group Exercise ${order}`,
+  description: "",
+  equipment: "",
+  duration: undefined,
+  durationUnit: ProgramDurationUnit.MINUTE,
+  fieldSelection: defaultExerciseFieldSelection,
   order,
   reps: 12,
   weight: 15,
@@ -61,19 +76,24 @@ export const createProgramExerciseDraft = (
   id: createId("exercise-item"),
   type: ProgramItemType.EXERCISE,
   title: `Exercise ${order}`,
+  description: "",
+  equipment: "",
+  duration: undefined,
+  durationUnit: ProgramDurationUnit.MINUTE,
+  fieldSelection: defaultExerciseFieldSelection,
   order,
   sets: [createSetDraft(1)],
 });
 
-export const createProgramSupersetDraft = (
+export const createProgramGroupDraft = (
   order: number,
-): ICourseCreateProgramSupersetInput => ({
-  id: createId("superset-item"),
-  type: ProgramItemType.SUPERSET,
-  title: `Superset ${order}`,
+): ICourseCreateProgramGroupInput => ({
+  id: createId("group-item"),
+  type: ProgramItemType.GROUP,
+  title: `Group ${order}`,
   order,
   rounds: 3,
-  exercises: [createSupersetExerciseDraft(1), createSupersetExerciseDraft(2)],
+  exercises: [createGroupExerciseDraft(1), createGroupExerciseDraft(2)],
 });
 
 export const createProgramSectionDraft = (
