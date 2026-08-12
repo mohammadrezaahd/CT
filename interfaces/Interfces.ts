@@ -135,14 +135,19 @@ export interface ITraineeSummary {
 
 // Program interfaces
 
-export enum ProgramBlockType {
-  SINGLE = "Single",
-  SUPERSET = "Superset",
-}
-
 export enum WeightUnit {
   KG = "kg",
   LB = "lb",
+}
+
+export enum ProgramItemType {
+  EXERCISE = "Exercise",
+  SUPERSET = "Superset",
+}
+
+export enum ProgramMediaType {
+  IMAGE = "Image",
+  VIDEO = "Video",
 }
 
 export interface IProgramSummary {
@@ -150,7 +155,6 @@ export interface IProgramSummary {
   courseId: string;
 
   title: string;
-
   status: IPublishStatus;
 
   order: number;
@@ -177,23 +181,16 @@ export interface IProgramSection {
 
   order: number;
 
-  blocks: IProgramBlock[];
+  items: IProgramSectionItem[];
 }
 
-export interface IProgramBlock {
-  id: string;
-  sectionId: string;
-
-  type: ProgramBlockType;
-
-  order: number;
-
-  exercises: IProgramExercise[];
-}
+export type IProgramSectionItem = IProgramExercise | IProgramSuperset;
 
 export interface IProgramExercise {
   id: string;
-  blockId: string;
+  sectionId: string;
+
+  type: ProgramItemType.EXERCISE;
 
   title: string;
   description?: string;
@@ -203,6 +200,38 @@ export interface IProgramExercise {
   order: number;
 
   sets: IProgramSet[];
+}
+
+export interface IProgramSuperset {
+  id: string;
+  sectionId: string;
+
+  type: ProgramItemType.SUPERSET;
+
+  title?: string;
+
+  order: number;
+
+  rounds: number;
+
+  exercises: IProgramSupersetExercise[];
+}
+
+export interface IProgramSupersetExercise {
+  id: string;
+  supersetId: string;
+
+  title: string;
+  description?: string;
+
+  media?: IProgramExerciseMedia[];
+
+  order: number;
+
+  reps?: number;
+
+  weight?: number;
+  weightUnit?: WeightUnit;
 }
 
 export interface IProgramSet {
@@ -223,9 +252,4 @@ export interface IProgramExerciseMedia {
   type: ProgramMediaType;
 
   url: string;
-}
-
-export enum ProgramMediaType {
-  IMAGE = "Image",
-  VIDEO = "Video",
 }

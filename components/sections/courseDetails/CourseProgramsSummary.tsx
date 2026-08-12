@@ -1,8 +1,11 @@
 "use client";
 
+import Link from "next/link";
+import { ArrowForwardRounded } from "@mui/icons-material";
 import { Box, Card, CardContent, Chip, Stack, Typography, useTheme } from "@mui/material";
 
 import { ICourseDetails } from "@/interfaces";
+import { dashboardBaseRoute } from "@/public/consts/dashboardItems";
 import { getPublishStatusConfig, getPublishStatusLabel } from "@/ui";
 
 export const CourseProgramsSummary = ({ course }: { course: ICourseDetails }) => {
@@ -78,6 +81,25 @@ export const CourseProgramsSummary = ({ course }: { course: ICourseDetails }) =>
                     {`${program.exercisesCount} exercises`}
                   </Typography>
                 </Stack>
+
+                <Box sx={{ mt: 1.25, display: "flex", justifyContent: "flex-end" }}>
+                  <Typography
+                    component={Link}
+                    href={`${dashboardBaseRoute}/courses/${course.id}/programs/${program.id}`}
+                    sx={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 0.5,
+                      textDecoration: "none",
+                      fontSize: 12,
+                      fontWeight: 700,
+                      color: "primary.main",
+                    }}
+                  >
+                    View program
+                    <ArrowForwardRounded fontSize="inherit" />
+                  </Typography>
+                </Box>
               </Box>
             );
           })}

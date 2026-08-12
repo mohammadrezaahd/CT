@@ -1,4 +1,4 @@
-import { WeightUnit } from "./Workout.interface";
+import { WorkoutWeightUnit } from "./Workout.interface";
 
 export type WorkoutSessionStatus =
   | "NOT_STARTED"
@@ -32,7 +32,7 @@ export interface SetResult {
   setId: string;
   completed: boolean;
   actualWeight?: number;
-  actualWeightUnit?: WeightUnit;
+  actualWeightUnit?: WorkoutWeightUnit;
   actualReps?: number;
 }
 

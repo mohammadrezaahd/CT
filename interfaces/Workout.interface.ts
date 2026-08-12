@@ -2,7 +2,7 @@ import { Media } from "./General.interface";
 
 export type WorkoutBlockType = "NORMAL" | "SUPERSET";
 
-export type WeightUnit = "KG" | "LB";
+export type WorkoutWeightUnit = "KG" | "LB";
 
 export interface Workout {
   id: string;
@@ -46,7 +46,7 @@ export interface WorkoutSet {
   exerciseId: string;
   order: number;
   weight?: number;
-  weightUnit?: WeightUnit;
+  weightUnit?: WorkoutWeightUnit;
   reps?: number;
 }
 
