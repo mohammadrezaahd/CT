@@ -3,7 +3,7 @@
 import { AddRounded } from "@mui/icons-material";
 import { Box, Button, Chip, Stack, Typography, useTheme } from "@mui/material";
 
-import { ICourseCreateProgramInput } from "@/interfaces/Interfces";
+import { ICourseCreateProgramInput, ProgramItemType } from "@/interfaces";
 import { createProgramDraft } from "@/public/fakeData/courseCreate";
 import { CourseCreateProgramCard } from "./CourseCreateProgramCard";
 
@@ -20,7 +20,7 @@ const countProgramExercises = (program: ICourseCreateProgramInput) =>
     return (
       sum +
       section.items.reduce((sectionSum, item) => {
-        if (item.type === "Exercise") {
+        if (item.type === ProgramItemType.EXERCISE) {
           return sectionSum + 1;
         }
 

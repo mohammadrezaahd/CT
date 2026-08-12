@@ -16,12 +16,12 @@ import {
 } from "@mui/material";
 import { AddRounded, DeleteOutlineRounded } from "@mui/icons-material";
 
-import { ICourseCreateInput } from "@/interfaces/Interfces";
+import { ICourseCreateInput, ICourseCreationTraineeOption } from "@/interfaces";
 import {
-  CourseCreationTraineeOption,
   courseDurationUnitOptions,
   courseCreationTraineeOptions,
 } from "@/public/fakeData/courseCreate";
+import { buildCourseOffsetCode } from "@/utils/courseOffsetFormatter";
 
 interface CourseCreateFormProps {
   value: ICourseCreateInput;
@@ -47,11 +47,16 @@ export const CourseCreateForm = ({ value, onChange }: CourseCreateFormProps) => 
     key: K,
     durationValue: ICourseCreateInput["duration"][K],
   ) => {
+    const nextDuration = {
+      ...value.duration,
+      [key]: durationValue,
+    };
+
     onChange({
       ...value,
       duration: {
-        ...value.duration,
-        [key]: durationValue,
+        ...nextDuration,
+        code: buildCourseOffsetCode(nextDuration.value, nextDuration.unit),
       },
     });
   };
@@ -67,6 +72,7 @@ export const CourseCreateForm = ({ value, onChange }: CourseCreateFormProps) => 
           id: `milestone-offset-${nextIndex}-${Date.now()}`,
           offset: nextIndex,
           unit: value.duration.unit,
+          code: buildCourseOffsetCode(nextIndex, value.duration.unit),
         },
       ],
     });
@@ -88,10 +94,17 @@ export const CourseCreateForm = ({ value, onChange }: CourseCreateFormProps) => 
       ...value,
       milestones: value.milestones.map((item) =>
         item.id === id
-          ? {
-              ...item,
-              [key]: fieldValue,
-            }
+          ? (() => {
+              const nextMilestone = {
+                ...item,
+                [key]: fieldValue,
+              };
+
+              return {
+                ...nextMilestone,
+                code: buildCourseOffsetCode(nextMilestone.offset, nextMilestone.unit),
+              };
+            })()
           : item,
       ),
     });
@@ -142,7 +155,7 @@ export const CourseCreateForm = ({ value, onChange }: CourseCreateFormProps) => 
             fullWidth
           />
 
-          <Autocomplete<CourseCreationTraineeOption>
+          <Autocomplete<ICourseCreationTraineeOption>
             options={courseCreationTraineeOptions}
             value={selectedTrainee}
             onChange={(_, option) => updateField("traineeId", option?.id ?? "")}

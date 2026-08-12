@@ -1,42 +1,13 @@
-export type UserRole = "COACH" | "TRAINEE";
+import { UserRole } from "./Common.interface";
 
-export interface User {
+export interface IUser {
   id: string;
   firstName: string;
   lastName: string;
   email: string;
+  birthDate: Date | string;
   role: UserRole;
   avatarUrl?: string;
   createdAt: string;
   updatedAt: string;
-}
-
-export interface CoachProfile {
-  userId: string;
-  bio?: string;
-}
-
-export interface TraineeProfile {
-  userId: string;
-  height: number;
-  currentWeight: number;
-}
-
-export interface Coach {
-  user: User;
-  profile: CoachProfile;
-  traineeIds: string[];
-}
-
-export interface Trainee {
-  user: User;
-  profile: TraineeProfile;
-  coachId: string;
-}
-
-export interface BodyMeasurement {
-  id: string;
-  traineeId: string;
-  weight: number;
-  recordedAt: string;
 }

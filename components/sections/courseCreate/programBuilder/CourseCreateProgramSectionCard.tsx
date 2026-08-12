@@ -10,7 +10,6 @@ import {
   Box,
   Button,
   Chip,
-  Divider,
   IconButton,
   MenuItem,
   Stack,
@@ -25,7 +24,7 @@ import {
   ICourseCreateProgramSupersetInput,
   ProgramItemType,
   WeightUnit,
-} from "@/interfaces/Interfces";
+} from "@/interfaces";
 import {
   createProgramExerciseDraft,
   createProgramSupersetDraft,
@@ -98,6 +97,36 @@ export const CourseCreateProgramSectionCard = ({
     });
   };
 
+  const updateExercisePrimarySet = (
+    exerciseId: string,
+    field: "reps" | "weight" | "weightUnit",
+    fieldValue: number | WeightUnit,
+  ) => {
+    updateItem(exerciseId, (currentItem) => {
+      if (!isExerciseItem(currentItem)) {
+        return currentItem;
+      }
+
+      const baseSet = currentItem.sets[0] ?? {
+        id: `set-${Date.now()}`,
+        order: 1,
+        reps: 10,
+        weight: 20,
+        weightUnit: WeightUnit.KG,
+      };
+
+      const nextSet = {
+        ...baseSet,
+        [field]: fieldValue,
+      };
+
+      return {
+        ...currentItem,
+        sets: [nextSet],
+      };
+    });
+  };
+
   return (
     <Box
       sx={{
@@ -162,155 +191,150 @@ export const CourseCreateProgramSectionCard = ({
         {section.items
           .slice()
           .sort((a, b) => a.order - b.order)
-          .map((item) => (
-            <Box
-              key={item.id}
-              sx={{
-                p: 1.5,
-                border: "1px solid",
-                borderColor: "divider",
-                borderRadius: theme.shape.rounded.light,
-                backgroundColor: item.type === ProgramItemType.SUPERSET ? "yellow.main" : "background.default",
-              }}
-            >
-              <Stack
-                direction="row"
-                spacing={1}
-                sx={{ alignItems: "center", justifyContent: "space-between", mb: 1.25 }}
-              >
-                <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
-                  <Typography variant="body2" sx={{ fontWeight: 700 }}>
-                    {`Item ${item.order}`}
-                  </Typography>
-                  <Chip
-                    size="small"
-                    label={item.type === ProgramItemType.EXERCISE ? "Exercise" : "Superset"}
-                    sx={{
-                      borderRadius: theme.shape.rounded.square,
-                      backgroundColor:
-                        item.type === ProgramItemType.EXERCISE ? "blue.main" : "background.paper",
-                      color: item.type === ProgramItemType.EXERCISE ? "blue.sub" : "yellow.sub",
-                      fontWeight: 700,
-                    }}
+          .map((item) => {
+            if (isExerciseItem(item)) {
+              const primarySet = item.sets[0] ?? {
+                id: `set-${item.id}`,
+                order: 1,
+                reps: 10,
+                weight: 20,
+                weightUnit: WeightUnit.KG,
+              };
+
+              return (
+                <Box
+                  key={item.id}
+                  sx={{
+                    display: "grid",
+                    gap: 1,
+                    gridTemplateColumns: { xs: "1fr", md: "1.3fr 0.7fr 0.7fr 0.6fr auto" },
+                    p: 1.25,
+                    border: "1px solid",
+                    borderColor: "divider",
+                    borderRadius: theme.shape.rounded.light,
+                    backgroundColor: "background.default",
+                    alignItems: "center",
+                  }}
+                >
+                  <TextField
+                    label="Exercise name"
+                    value={item.title}
+                    onChange={(event) =>
+                      updateItem(item.id, (currentItem) => ({
+                        ...currentItem,
+                        title: event.target.value,
+                      }))
+                    }
+                    fullWidth
                   />
+
+                  <TextField
+                    label="Reps"
+                    type="number"
+                    value={primarySet.reps}
+                    onChange={(event) =>
+                      updateExercisePrimarySet(
+                        item.id,
+                        "reps",
+                        Math.max(Number(event.target.value) || 0, 0),
+                      )
+                    }
+                    fullWidth
+                  />
+
+                  <TextField
+                    label="Weight"
+                    type="number"
+                    value={primarySet.weight}
+                    onChange={(event) =>
+                      updateExercisePrimarySet(
+                        item.id,
+                        "weight",
+                        Math.max(Number(event.target.value) || 0, 0),
+                      )
+                    }
+                    fullWidth
+                  />
+
+                  <TextField
+                    select
+                    label="Unit"
+                    value={primarySet.weightUnit}
+                    onChange={(event) =>
+                      updateExercisePrimarySet(item.id, "weightUnit", event.target.value as WeightUnit)
+                    }
+                    fullWidth
+                  >
+                    {weightUnitOptions.map((unit) => (
+                      <MenuItem key={unit} value={unit}>
+                        {unit}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+
+                  <IconButton
+                    aria-label="remove item"
+                    onClick={() => removeItem(item.id)}
+                    sx={{ color: "text.secondary", alignSelf: "center" }}
+                  >
+                    <DeleteOutlineRounded fontSize="small" />
+                  </IconButton>
+                </Box>
+              );
+            }
+
+            return (
+              <Box
+                key={item.id}
+                sx={{
+                  p: 1.5,
+                  border: "1px solid",
+                  borderColor: "divider",
+                  borderRadius: theme.shape.rounded.light,
+                  backgroundColor: "yellow.main",
+                }}
+              >
+                <Stack
+                  direction="row"
+                  spacing={1}
+                  sx={{ alignItems: "center", justifyContent: "space-between", mb: 1.25 }}
+                >
+                  <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+                    <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                      {`Item ${item.order}`}
+                    </Typography>
+                    <Chip
+                      size="small"
+                      label="Superset"
+                      sx={{
+                        borderRadius: theme.shape.rounded.square,
+                        backgroundColor: "background.paper",
+                        color: "yellow.sub",
+                        fontWeight: 700,
+                      }}
+                    />
+                  </Stack>
+
+                  <IconButton
+                    aria-label="remove item"
+                    onClick={() => removeItem(item.id)}
+                    sx={{ color: "text.secondary" }}
+                  >
+                    <DeleteOutlineRounded fontSize="small" />
+                  </IconButton>
                 </Stack>
 
-                <IconButton
-                  aria-label="remove item"
-                  onClick={() => removeItem(item.id)}
-                  sx={{ color: "text.secondary" }}
-                >
-                  <DeleteOutlineRounded fontSize="small" />
-                </IconButton>
-              </Stack>
-
-              <TextField
-                label="Item title"
-                value={item.title}
-                onChange={(event) =>
-                  updateItem(item.id, (currentItem) => ({
-                    ...currentItem,
-                    title: event.target.value,
-                  }))
-                }
-                fullWidth
-              />
-
-              {isExerciseItem(item) ? (
-                <>
-                  <Divider sx={{ my: 1.5 }} />
-                  <Typography variant="caption" color="text.secondary">
-                    Sets
-                  </Typography>
-
-                  <Stack spacing={1} sx={{ mt: 1 }}>
-                    {item.sets
-                      .slice()
-                      .sort((a, b) => a.order - b.order)
-                      .map((set) => (
-                        <Box
-                          key={set.id}
-                          sx={{
-                            display: "grid",
-                            gap: 1,
-                            gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr 1fr" },
-                            p: 1,
-                            border: "1px solid",
-                            borderColor: "divider",
-                            borderRadius: theme.shape.rounded.light,
-                            backgroundColor: "background.paper",
-                          }}
-                        >
-                          <TextField label="Reps" type="number" value={set.reps} onChange={(event) =>
-                            updateItem(item.id, (currentItem) => {
-                              if (!isExerciseItem(currentItem)) {
-                                return currentItem;
-                              }
-
-                              return {
-                                ...currentItem,
-                                sets: currentItem.sets.map((currentSet) =>
-                                  currentSet.id === set.id
-                                    ? {
-                                        ...currentSet,
-                                        reps: Math.max(Number(event.target.value) || 0, 0),
-                                      }
-                                    : currentSet,
-                                ),
-                              };
-                            })
-                          } fullWidth />
-
-                          <TextField label="Weight" type="number" value={set.weight} onChange={(event) =>
-                            updateItem(item.id, (currentItem) => {
-                              if (!isExerciseItem(currentItem)) {
-                                return currentItem;
-                              }
-
-                              return {
-                                ...currentItem,
-                                sets: currentItem.sets.map((currentSet) =>
-                                  currentSet.id === set.id
-                                    ? {
-                                        ...currentSet,
-                                        weight: Math.max(Number(event.target.value) || 0, 0),
-                                      }
-                                    : currentSet,
-                                ),
-                              };
-                            })
-                          } fullWidth />
-
-                          <TextField select label="Unit" value={set.weightUnit} onChange={(event) =>
-                            updateItem(item.id, (currentItem) => {
-                              if (!isExerciseItem(currentItem)) {
-                                return currentItem;
-                              }
-
-                              return {
-                                ...currentItem,
-                                sets: currentItem.sets.map((currentSet) =>
-                                  currentSet.id === set.id
-                                    ? {
-                                        ...currentSet,
-                                        weightUnit: event.target.value as WeightUnit,
-                                      }
-                                    : currentSet,
-                                ),
-                              };
-                            })
-                          } fullWidth>
-                            {weightUnitOptions.map((unit) => (
-                              <MenuItem key={unit} value={unit}>
-                                {unit}
-                              </MenuItem>
-                            ))}
-                          </TextField>
-                        </Box>
-                      ))}
-                  </Stack>
-                </>
-              ) : null}
+                <TextField
+                  label="Item title"
+                  value={item.title}
+                  onChange={(event) =>
+                    updateItem(item.id, (currentItem) => ({
+                      ...currentItem,
+                      title: event.target.value,
+                    }))
+                  }
+                  fullWidth
+                />
 
               {isSupersetItem(item) ? (
                 <>
@@ -524,8 +548,9 @@ export const CourseCreateProgramSectionCard = ({
                   </Stack>
                 </>
               ) : null}
-            </Box>
-          ))}
+              </Box>
+            );
+          })}
       </Stack>
     </Box>
   );

@@ -2,7 +2,7 @@
 
 import { Avatar, Box, Card, CardContent, Chip, Divider, Stack, Typography, useTheme } from "@mui/material";
 
-import { ICourseCreateInput } from "@/interfaces/Interfces";
+import { ICourseCreateInput } from "@/interfaces";
 import { courseCreationTraineeOptions } from "@/public/fakeData/courseCreate";
 import { formatDurationLabel, formatMilestoneLabel } from "./shared";
 

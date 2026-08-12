@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ArrowBackRounded } from "@mui/icons-material";
 import { Box, Button, Chip, Typography, useTheme } from "@mui/material";
 
-import { ICourseDetails, IProgramDetails } from "@/interfaces/Interfces";
+import { ICourseDetails, IProgramDetails } from "@/interfaces";
 import {
   getPublishStatusConfig,
   getPublishStatusLabel,

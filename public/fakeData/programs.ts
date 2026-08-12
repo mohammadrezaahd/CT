@@ -8,7 +8,7 @@ import {
   IProgramSupersetExercise,
   ProgramItemType,
   WeightUnit,
-} from "@/interfaces/Interfces";
+} from "@/interfaces";
 import { coachCourseDetailsData } from "@/public/fakeData/courses";
 
 const buildSets = (exerciseId: string, baseOrder: number): IProgramSet[] => {

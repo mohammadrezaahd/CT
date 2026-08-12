@@ -2,7 +2,7 @@
 
 import { Box, Button, Stack, Typography, useTheme } from "@mui/material";
 
-import { CourseCreatePublishMode as PublishMode } from "@/interfaces/Interfces";
+import { CourseCreatePublishMode as PublishMode } from "@/interfaces";
 
 export const CourseCreatePublishMode = ({
   value,

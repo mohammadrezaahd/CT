@@ -1,11 +1,8 @@
-export interface DateFormatOptions {
-  locale?: string;
-  options?: Intl.DateTimeFormatOptions;
-}
+import { IDateFormatOptions } from "@/interfaces";
 
 export const formatDate = (
   value: Date | string,
-  config: DateFormatOptions = {},
+  config: IDateFormatOptions = {},
 ) => {
   const parsedDate = value instanceof Date ? value : new Date(value);
 

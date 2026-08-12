@@ -25,7 +25,7 @@ import {
   IProgramExercise,
   IProgramSuperset,
   ProgramItemType,
-} from "@/interfaces/Interfces";
+} from "@/interfaces";
 
 const formatSetValue = (value?: number) => (typeof value === "number" ? value : "-");
 

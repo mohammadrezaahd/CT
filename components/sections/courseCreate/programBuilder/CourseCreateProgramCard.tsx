@@ -14,7 +14,7 @@ import {
   useTheme,
 } from "@mui/material";
 
-import { ICourseCreateProgramInput } from "@/interfaces/Interfces";
+import { ICourseCreateProgramInput } from "@/interfaces";
 import { createProgramSectionDraft } from "@/public/fakeData/courseCreate";
 import { CourseCreateProgramSectionCard } from "./CourseCreateProgramSectionCard";
 

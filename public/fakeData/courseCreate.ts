@@ -1,6 +1,7 @@
 import {
   CourseCreatePublishMode,
   CourseDurationUnit,
+  ICourseCreationTraineeOption,
   ICourseCreateProgramExerciseInput,
   ICourseCreateProgramInput,
   ICourseCreateProgramSectionInput,
@@ -10,17 +11,11 @@ import {
   ICourseCreateInput,
   ProgramItemType,
   WeightUnit,
-} from "@/interfaces/Interfces";
+} from "@/interfaces";
 import { coachDashboardData } from "@/public/fakeData/coachDashboard";
+import { buildCourseOffsetCode } from "@/utils/courseOffsetFormatter";
 
-export interface CourseCreationTraineeOption {
-  id: string;
-  name: string;
-  courseName: string;
-  avatar?: string;
-}
-
-export const courseCreationTraineeOptions: CourseCreationTraineeOption[] =
+export const courseCreationTraineeOptions: ICourseCreationTraineeOption[] =
   coachDashboardData.trainees.map((trainee) => ({
     id: trainee.id,
     name: trainee.name,
@@ -67,7 +62,7 @@ export const createProgramExerciseDraft = (
   type: ProgramItemType.EXERCISE,
   title: `Exercise ${order}`,
   order,
-  sets: [createSetDraft(1), createSetDraft(2), createSetDraft(3)],
+  sets: [createSetDraft(1)],
 });
 
 export const createProgramSupersetDraft = (
@@ -109,17 +104,20 @@ export const courseCreationInitialValues: ICourseCreateInput = {
   duration: {
     value: 2,
     unit: "MONTH",
+    code: buildCourseOffsetCode(2, "MONTH"),
   },
   milestones: [
     {
       id: "milestone-offset-1",
       offset: 2,
       unit: "WEEK",
+      code: buildCourseOffsetCode(2, "WEEK"),
     },
     {
       id: "milestone-offset-2",
       offset: 4,
       unit: "WEEK",
+      code: buildCourseOffsetCode(4, "WEEK"),
     },
   ],
   programs: [createProgramDraft(1)],

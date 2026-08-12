@@ -1,35 +1,77 @@
-export interface Program {
+import { IPublishStatus, ProgramItemType, ProgramMediaType, WeightUnit } from "./Common.interface";
+
+export interface IProgramSummary {
   id: string;
-  coachId: string;
+  courseId: string;
   title: string;
+  status: IPublishStatus;
+  order: number;
+  sectionsCount: number;
+  exercisesCount: number;
+}
+
+export interface IProgramDetails extends IProgramSummary {
   description?: string;
-  startDate: string;
-  endDate: string;
-  schedules: ProgramSchedule[];
+  sections: IProgramSection[];
   createdAt: string;
   updatedAt: string;
 }
 
-export interface ProgramSchedule {
+export interface IProgramSection {
   id: string;
   programId: string;
-  workoutId: string;
-  date: string;
+  title: string;
+  description?: string;
   order: number;
+  items: IProgramSectionItem[];
 }
 
-export interface ProgramAssignment {
+export type IProgramSectionItem = IProgramExercise | IProgramSuperset;
+
+export interface IProgramExercise {
   id: string;
-  programId: string;
-  traineeId: string;
-  assignedAt: string;
-  startDate: string;
-  endDate: string;
-  status: ProgramAssignmentStatus;
+  sectionId: string;
+  type: ProgramItemType.EXERCISE;
+  title: string;
+  description?: string;
+  media?: IProgramExerciseMedia[];
+  order: number;
+  sets: IProgramSet[];
 }
 
-export type ProgramAssignmentStatus =
-  | "UPCOMING"
-  | "ACTIVE"
-  | "COMPLETED"
-  | "CANCELLED";
+export interface IProgramSuperset {
+  id: string;
+  sectionId: string;
+  type: ProgramItemType.SUPERSET;
+  title?: string;
+  order: number;
+  rounds: number;
+  exercises: IProgramSupersetExercise[];
+}
+
+export interface IProgramSupersetExercise {
+  id: string;
+  supersetId: string;
+  title: string;
+  description?: string;
+  media?: IProgramExerciseMedia[];
+  order: number;
+  reps?: number;
+  weight?: number;
+  weightUnit?: WeightUnit;
+}
+
+export interface IProgramSet {
+  id: string;
+  exerciseId: string;
+  order: number;
+  reps?: number;
+  weight?: number;
+  weightUnit?: WeightUnit;
+}
+
+export interface IProgramExerciseMedia {
+  id: string;
+  type: ProgramMediaType;
+  url: string;
+}

@@ -1,7 +1,8 @@
 import {
   CourseDurationUnit,
   ICourseCreateMilestoneInput,
-} from "@/interfaces/Interfces";
+} from "@/interfaces";
+import { parseCourseOffsetCode } from "@/utils/courseOffsetFormatter";
 
 const durationUnitLabels: Record<CourseDurationUnit, string> = {
   DAY: "day",
@@ -18,11 +19,17 @@ export const formatDurationLabel = (value: number, unit: CourseDurationUnit) => 
 };
 
 export const formatMilestoneLabel = (milestone: ICourseCreateMilestoneInput) => {
-  const prefixByUnit: Record<CourseDurationUnit, string> = {
-    DAY: "Day",
-    WEEK: "Week",
-    MONTH: "Month",
-  };
+  const parsed = parseCourseOffsetCode(milestone.code);
 
-  return `${prefixByUnit[milestone.unit]} ${milestone.offset}`;
+  if (parsed) {
+    const prefixByUnit: Record<CourseDurationUnit, string> = {
+      DAY: "Day",
+      WEEK: "Week",
+      MONTH: "Month",
+    };
+
+    return `${prefixByUnit[parsed.unit]} ${parsed.value}`;
+  }
+
+  return milestone.code;
 };
