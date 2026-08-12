@@ -7,6 +7,7 @@ import {
   IProgramSuperset,
   IProgramSupersetExercise,
   ProgramItemType,
+  WeightUnit,
 } from "@/interfaces/Interfces";
 import { coachCourseDetailsData } from "@/public/fakeData/courses";
 
@@ -17,7 +18,7 @@ const buildSets = (exerciseId: string, baseOrder: number): IProgramSet[] => {
     order: baseOrder + index,
     reps: 8 + index * 2,
     weight: 25 + index * 5,
-    weightUnit: "kg",
+    weightUnit: WeightUnit.KG,
   }));
 };
 
@@ -53,7 +54,7 @@ const buildSupersetExercises = (
       order: index + 1,
       reps: 10 + index * 2,
       weight: 20 + index * 5,
-      weightUnit: "kg",
+      weightUnit: WeightUnit.KG,
     };
   });
 };
